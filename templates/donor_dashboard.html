@@ -91,6 +91,31 @@
                         </p>
                     </div>
 
+                    {% if donation.requests %}
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-2">Pending Requests</h4>
+                        {% for request in donation.requests %}
+                        {% if request.status == 'pending' %}
+                        <div class="bg-white rounded p-3 mb-2 shadow-sm">
+                            <div class="flex justify-between items-center">
+                                <p class="text-sm">From: {{ request.requester.name }}</p>
+                                <div class="flex space-x-2">
+                                    <a href="{{ url_for('update_request', request_id=request.id, status='approved') }}"
+                                       class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                        <i class="fas fa-check mr-1"></i>Approve
+                                    </a>
+                                    <a href="{{ url_for('update_request', request_id=request.id, status='denied') }}"
+                                       class="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        <i class="fas fa-times mr-1"></i>Deny
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                     <div class="pt-4 border-t border-gray-200">
                         <a href="{{ url_for('edit_donation', id=donation.id) }}"
                            class="text-blue-500 hover:text-blue-700 mr-4">

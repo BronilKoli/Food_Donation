@@ -32,32 +32,40 @@ db.init_app(app)
 def init_db():
     with app.app_context():
         try:
-            # Drop all tables first to ensure clean state
-            db.drop_all()
-            logger.info("Dropped all existing tables")
+            # Check if tables exist
+            inspect = db.inspect(db.engine)
+            tables_exist = inspect.get_table_names()
             
-            # Create all tables
-            db.create_all()
-            logger.info("Created all database tables successfully!")
-            
-            # Create test users if needed
-            if app.config['DEBUG']:
-                test_donor = User(
-                    email='donor@test.com',
-                    password=generate_password_hash('password'),
-                    name='Test Donor',
-                    role='donor'
-                )
-                test_recipient = User(
-                    email='recipient@test.com',
-                    password=generate_password_hash('password'),
-                    name='Test Recipient',
-                    role='recipient'
-                )
-                db.session.add(test_donor)
-                db.session.add(test_recipient)
-                db.session.commit()
-                logger.info("Created test users")
+            if not tables_exist:
+                logger.info("No tables found. Creating database tables...")
+                db.create_all()
+                logger.info("Created all database tables successfully!")
+                
+                # Create test users if needed
+                if app.config['DEBUG']:
+                    # Check if test users already exist
+                    test_donor = User.query.filter_by(email='donor@test.com').first()
+                    test_recipient = User.query.filter_by(email='recipient@test.com').first()
+                    
+                    if not test_donor and not test_recipient:
+                        test_donor = User(
+                            email='donor@test.com',
+                            password=generate_password_hash('password'),
+                            name='Test Donor',
+                            role='donor'
+                        )
+                        test_recipient = User(
+                            email='recipient@test.com',
+                            password=generate_password_hash('password'),
+                            name='Test Recipient',
+                            role='recipient'
+                        )
+                        db.session.add(test_donor)
+                        db.session.add(test_recipient)
+                        db.session.commit()
+                        logger.info("Created test users")
+            else:
+                logger.info("Database tables already exist")
                 
         except Exception as e:
             logger.error(f"Error initializing database: {str(e)}")
@@ -328,16 +336,30 @@ def update_request(request_id, status):
             flash('Unauthorized action.', 'danger')
             return redirect(url_for('manage_donations'))
             
+        if status not in ['approved', 'denied', 'collected']:
+            flash('Invalid status.', 'danger')
+            return redirect(url_for('manage_donations'))
+            
         food_request.status = status
         if status == 'collected':
             food_request.donation.status = 'collected'
+        elif status == 'denied':
+            # If the request is denied, allow others to request it
+            food_request.donation.status = 'available'
             
         db.session.commit()
-        flash('Request updated successfully!', 'success')
+        
+        status_messages = {
+            'approved': 'Request approved successfully!',
+            'denied': 'Request denied successfully!',
+            'collected': 'Donation marked as collected!'
+        }
+        flash(status_messages.get(status, 'Request updated successfully!'), 'success')
         
     except Exception as e:
         logger.error(f"Update request error: {str(e)}")
         flash('Error updating request.', 'danger')
+        db.session.rollback()
         
     return redirect(url_for('manage_donations'))
 
