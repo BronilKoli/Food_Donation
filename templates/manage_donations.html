@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Your Donations</h2>
-<table>
-    <tr>
-        <th>Food</th>
-        <th>Quantity</th>
-        <th>Location</th>
-        <th>Status</th>
-    </tr>
-    {% for donation in donations %}
-    <tr>
-        <td>{{ donation.food_name }}</td>
-        <td>{{ donation.quantity }}</td>
-        <td>{{ donation.location }}</td>
-        <td>{{ donation.status }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <h2>Manage Donations</h2>
+    {% if donations %}
+        <h2>Your Donations</h2>
+        <table>
+            <tr>
+                <th>Food</th>
+                <th>Quantity</th>
+                <th>Location</th>
+                <th>Status</th>
+            </tr>
+            {% for donation in donations %}
+            <tr>
+                <td>{{ donation.food_name }}</td>
+                <td>{{ donation.quantity }}</td>
+                <td>{{ donation.location }}</td>
+                <td>{{ donation.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No donations found.</p>
+    {% endif %}
 {% endblock %}
