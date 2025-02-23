@@ -2,48 +2,51 @@
 {% block content %}
 <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">
-        <i class="fas fa-gift mr-2"></i>Donate Food
+        <i class="fas fa-edit mr-2"></i>Edit Donation
     </h2>
 
     <form method="POST" class="space-y-6">
         <div>
             <label for="food_name" class="block text-sm font-medium text-gray-700">Food Name</label>
             <input type="text" id="food_name" name="food_name" required
-                   placeholder="e.g., Rice and Vegetables"
+                   value="{{ donation.food_name }}"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                          focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
 
         <div>
             <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
             <input type="text" id="quantity" name="quantity" required
-                   placeholder="e.g., 2 Kg"
+                   value="{{ donation.quantity }}"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                          focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
 
         <div>
             <label for="location" class="block text-sm font-medium text-gray-700">Pickup Location</label>
             <input type="text" id="location" name="location" required
-                   placeholder="Enter pickup address"
+                   value="{{ donation.location }}"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                          focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
 
         <div>
             <label for="expiry_date" class="block text-sm font-medium text-gray-700">Expiry Date</label>
             <input type="date" id="expiry_date" name="expiry_date" required
+                   value="{{ donation.expiry_date.strftime('%Y-%m-%d') }}"
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-                          focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
 
-        <button type="submit" 
-                class="w-full flex justify-center items-center space-x-2 py-2 px-4 border border-transparent 
-                       rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 
-                       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-            <i class="fas fa-gift"></i>
-            <span>Submit Donation</span>
-        </button>
+        <div class="flex space-x-4">
+            <button type="submit" class="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                <i class="fas fa-save mr-2"></i>Save Changes
+            </button>
+            <a href="{{ url_for('manage_donations') }}" 
+               class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 text-center">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </a>
+        </div>
     </form>
 </div>
 {% endblock %}

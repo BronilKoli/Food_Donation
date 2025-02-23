@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">
+            <i class="fas fa-hand-holding-heart mr-2"></i>Available Donations
+        </h1>
+        <div class="flex space-x-4">
+            <div class="relative">
+                <input type="text" placeholder="Search donations..." 
+                       class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <select class="border rounded-lg px-4 py-2">
+                <option value="">All Categories</option>
+                <option value="meals">Prepared Meals</option>
+                <option value="groceries">Groceries</option>
+                <option value="produce">Fresh Produce</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Donation Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for donation in available_donations %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6 space-y-4">
+                <div class="flex justify-between items-start">
+                    <h3 class="text-xl font-semibold text-gray-800">{{ donation.food_name }}</h3>
+                    <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                        <i class="fas fa-clock mr-1"></i>Available
+                    </span>
+                </div>
+                
+                <div class="space-y-3 text-gray-600">
+                    <p class="flex items-center">
+                        <i class="fas fa-user-circle w-5"></i>
+                        <span>{{ donation.donor.name }}</span>
+                    </p>
+                    <p class="flex items-center">
+                        <i class="fas fa-box w-5"></i>
+                        <span>{{ donation.quantity }}</span>
+                    </p>
+                    <p class="flex items-center">
+                        <i class="fas fa-map-marker-alt w-5"></i>
+                        <span>{{ donation.location }}</span>
+                    </p>
+                    <p class="flex items-center">
+                        <i class="fas fa-calendar-alt w-5"></i>
+                        <span>Expires: {{ donation.expiry_date.strftime('%Y-%m-%d') }}</span>
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ url_for('request_food', donation_id=donation.id) }}">
+                    <button type="submit" 
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 
+                                   rounded-lg transition duration-200 flex items-center justify-center space-x-2">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <span>Request Food</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    {% if not available_donations %}
+    <div class="text-center py-12">
+        <div class="inline-block p-4 rounded-full bg-gray-100 mb-4">
+            <i class="fas fa-box-open text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-xl font-medium text-gray-600">No donations available</h3>
+        <p class="text-gray-500 mt-2">Check back later for new donations</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

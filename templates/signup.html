@@ -1,14 +1,101 @@
 {% extends "base.html" %}
+
+{% block title %}Sign Up - FoodShare{% endblock %}
+
 {% block content %}
-<h2>Sign Up</h2>
-<form method="POST">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="text" name="name" placeholder="Name" required>
-    <select name="role">
-        <option value="Donor">Donor</option>
-        <option value="Receiver">Receiver</option>
-    </select>
-    <button type="submit">Sign Up</button>
-</form>
+<div class="min-h-full flex flex-col justify-center">
+    <div class="max-w-md w-full mx-auto">
+        <div class="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Create Account</h2>
+                <p class="text-gray-600 mt-2">Join our food sharing community</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('signup') }}" class="space-y-6">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-envelope mr-2"></i>Email
+                    </label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           value="{{ request.form.email or '' }}"
+                           required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md 
+                                  shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           required
+                           minlength="6"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md 
+                                  shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="mt-1 text-xs text-gray-500">Must be at least 6 characters long</p>
+                </div>
+
+                <!-- Name Field -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-user mr-2"></i>Full Name
+                    </label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           value="{{ request.form.name or '' }}"
+                           required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md 
+                                  shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Role Selection -->
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700">
+                        <i class="fas fa-user-tag mr-2"></i>I want to
+                    </label>
+                    <select id="role" 
+                            name="role" 
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md 
+                                   shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Role</option>
+                        <option value="donor" {% if request.form.role == 'donor' %}selected{% endif %}>
+                            <i class="fas fa-hand-holding-heart"></i> Donate Food
+                        </option>
+                        <option value="recipient" {% if request.form.role == 'recipient' %}selected{% endif %}>
+                            <i class="fas fa-hand-holding"></i> Receive Food
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        class="w-full flex justify-center items-center py-2 px-4 border border-transparent 
+                               rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 
+                               hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                               focus:ring-blue-500">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="{{ url_for('login') }}" 
+                       class="font-medium text-blue-600 hover:text-blue-500">
+                        <i class="fas fa-sign-in-alt mr-1"></i>Sign in
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

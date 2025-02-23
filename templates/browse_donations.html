@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">
+            <i class="fas fa-search mr-2"></i>Browse Available Donations
+        </h1>
+        <div class="flex space-x-4">
+            <div class="relative">
+                <input type="text" placeholder="Search donations..." 
+                       class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for donation in donations %}
+        <div class="bg-white rounded-lg shadow-md p-6 space-y-4">
+            <div class="flex justify-between items-start">
+                <h3 class="text-xl font-semibold text-gray-800">{{ donation.food_name }}</h3>
+                <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">Available</span>
+            </div>
+            
+            <div class="space-y-2 text-gray-600">
+                <p><i class="fas fa-user-circle w-5"></i>{{ donation.donor.name }}</p>
+                <p><i class="fas fa-box w-5"></i>{{ donation.quantity }}</p>
+                <p><i class="fas fa-map-marker-alt w-5"></i>{{ donation.location }}</p>
+                <p><i class="fas fa-calendar-alt w-5"></i>Expires: {{ donation.expiry_date.strftime('%Y-%m-%d') }}</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('request_food', donation_id=donation.id) }}">
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-hand-holding-heart mr-2"></i>Request Food
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,10 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Food Donation System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodShare - {% block title %}Welcome{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-    <h1>Food Donation System</h1>
-    {% block content %}{% endblock %}
+<body class="min-h-screen bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="{{ url_for('dashboard') if 'user_id' in session else url_for('login') }}" 
+                   class="flex items-center space-x-2">
+                    <i class="fas fa-heart text-2xl text-rose-500"></i>
+                    <span class="text-xl font-bold">FoodShare</span>
+                </a>
+                
+                {% if 'user_id' not in session %}
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('login') }}" class="text-gray-600 hover:text-gray-900">Login</a>
+                    <a href="{{ url_for('signup') }}" 
+                       class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                       Sign Up
+                    </a>
+                </div>
+                {% else %}
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">{{ session['user_name'] }}</span>
+                    <a href="{{ url_for('logout') }}" class="text-red-500 hover:text-red-600">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto px-4 py-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="p-4 mb-4 rounded-lg {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'danger' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="min-h-[calc(100vh-4rem)]">
+        {% block content %}{% endblock %}
+    </main>
 </body>
 </html>
