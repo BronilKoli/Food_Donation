@@ -848,3 +848,412 @@
 2025-02-23 20:48:09,842 - __main__ - INFO - Database initialized successfully!
 2025-02-23 20:48:09,873 - werkzeug - WARNING -  * Debugger is active!
 2025-02-23 20:48:09,880 - werkzeug - INFO -  * Debugger PIN: 106-394-529
+2025-03-14 10:33:04,480 - __main__ - INFO - Database tables already exist
+2025-03-14 10:33:04,486 - __main__ - INFO - Database tables already exist
+2025-03-14 10:33:04,486 - __main__ - INFO - Database initialized successfully!
+2025-03-14 10:33:04,534 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 10:33:04,535 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 10:33:04,537 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 10:33:05,041 - __main__ - INFO - Database tables already exist
+2025-03-14 10:33:05,046 - __main__ - INFO - Database tables already exist
+2025-03-14 10:33:05,047 - __main__ - INFO - Database initialized successfully!
+2025-03-14 10:33:05,064 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 10:33:05,072 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 10:33:09,507 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:33:09] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 10:33:09,515 - __main__ - INFO - Accessing login route
+2025-03-14 10:33:09,536 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:33:09] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:33:10,213 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:33:10] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-14 10:33:13,021 - __main__ - INFO - Accessing login route
+2025-03-14 10:33:13,067 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:33:13] "POST /login HTTP/1.1" 200 -
+2025-03-14 10:33:14,620 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:33:14] "GET /signup HTTP/1.1" 200 -
+2025-03-14 10:36:20,091 - __main__ - INFO - Database tables already exist
+2025-03-14 10:36:20,095 - __main__ - INFO - Database tables already exist
+2025-03-14 10:36:20,095 - __main__ - INFO - Database initialized successfully!
+2025-03-14 10:36:20,135 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 10:36:20,136 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 10:36:20,138 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 10:36:21,055 - __main__ - INFO - Database tables already exist
+2025-03-14 10:36:21,067 - __main__ - INFO - Database tables already exist
+2025-03-14 10:36:21,068 - __main__ - INFO - Database initialized successfully!
+2025-03-14 10:36:21,091 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 10:36:21,096 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 10:36:23,925 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:36:23] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 10:36:23,946 - __main__ - INFO - Accessing login route
+2025-03-14 10:36:23,954 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:36:23] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:36:26,070 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:36:26] "GET /signup HTTP/1.1" 200 -
+2025-03-14 10:36:53,338 - __main__ - INFO - Accessing login route
+2025-03-14 10:36:53,341 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:36:53] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:40:45,021 - __main__ - INFO - Accessing login route
+2025-03-14 10:40:45,031 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:40:45] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:41:52,098 - __main__ - INFO - Accessing login route
+2025-03-14 10:41:52,100 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:41:52] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:41:52,895 - __main__ - INFO - Accessing login route
+2025-03-14 10:41:52,896 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:41:52] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:41:53,398 - __main__ - INFO - Accessing login route
+2025-03-14 10:41:53,402 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:41:53] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:41:53,743 - __main__ - INFO - Accessing login route
+2025-03-14 10:41:53,744 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:41:53] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:41:54,162 - __main__ - INFO - Accessing login route
+2025-03-14 10:41:54,163 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:41:54] "GET /login HTTP/1.1" 200 -
+2025-03-14 10:42:00,848 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:42:00] "GET /signup HTTP/1.1" 200 -
+2025-03-14 10:47:18,088 - __main__ - INFO - Accessing login route
+2025-03-14 10:47:18,092 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 10:47:18] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:04:01,413 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:01] "GET /signup HTTP/1.1" 200 -
+2025-03-14 11:04:21,954 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:21] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-03-14 11:04:21,965 - __main__ - INFO - Accessing login route
+2025-03-14 11:04:21,968 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:21] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:04:23,664 - __main__ - INFO - Accessing login route
+2025-03-14 11:04:23,675 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:23] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:04:34,076 - __main__ - INFO - Accessing login route
+2025-03-14 11:04:34,082 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:34] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:04:41,922 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:41] "GET /signup HTTP/1.1" 200 -
+2025-03-14 11:04:46,024 - __main__ - INFO - Accessing login route
+2025-03-14 11:04:46,027 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:04:46] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:06:47,805 - __main__ - INFO - Accessing login route
+2025-03-14 11:06:48,066 - __main__ - INFO - User logged in successfully: ralphaacarvalho@gmail.com
+2025-03-14 11:06:48,067 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:06:48] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 11:06:48,080 - __main__ - ERROR - Dashboard error: name 'FoodDonation' is not defined
+2025-03-14 11:06:48,081 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:06:48] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 11:06:48,091 - __main__ - INFO - Accessing login route
+2025-03-14 11:06:48,094 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:06:48] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:11:37,258 - __main__ - INFO - Accessing login route
+2025-03-14 11:11:37,504 - __main__ - INFO - User logged in successfully: ralphaacarvalho@gmail.com
+2025-03-14 11:11:37,505 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:11:37] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 11:11:37,515 - __main__ - ERROR - Dashboard error: name 'FoodDonation' is not defined
+2025-03-14 11:11:37,518 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:11:37] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 11:11:37,527 - __main__ - INFO - Accessing login route
+2025-03-14 11:11:37,539 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:11:37] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:38:01,303 - __main__ - INFO - Database tables already exist
+2025-03-14 11:38:23,491 - __main__ - INFO - Creating database tables...
+2025-03-14 11:38:23,514 - __main__ - INFO - Created all database tables successfully!
+2025-03-14 11:40:08,365 - __main__ - INFO - Creating database tables...
+2025-03-14 11:40:08,383 - __main__ - INFO - Created all database tables successfully!
+2025-03-14 11:40:08,390 - __main__ - INFO - Database tables already exist
+2025-03-14 11:40:08,390 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:40:08,429 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 11:40:08,430 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 11:40:08,431 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:40:09,178 - __main__ - INFO - Database tables already exist
+2025-03-14 11:40:09,184 - __main__ - INFO - Database tables already exist
+2025-03-14 11:40:09,186 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:40:09,215 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:40:09,224 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:40:10,815 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:10] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 11:40:10,842 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:10] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:40:13,903 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:13] "GET /signup HTTP/1.1" 200 -
+2025-03-14 11:40:18,911 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:18] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:40:21,984 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:21] "GET /signup HTTP/1.1" 200 -
+2025-03-14 11:40:24,098 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-03-14 11:40:24,101 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:24] "POST /signup HTTP/1.1" 200 -
+2025-03-14 11:40:26,554 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:26] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:40:28,258 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-03-14 11:40:28,261 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:28] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:40:41,049 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-03-14 11:40:41,051 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:40:41] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:47:29,929 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:47:30,050 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:47:30,828 - __main__ - INFO - Database tables already exist
+2025-03-14 11:47:30,834 - __main__ - INFO - Database tables already exist
+2025-03-14 11:47:30,834 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:47:30,870 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:47:30,877 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:47:31,938 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:47:32,106 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:47:32,894 - __main__ - INFO - Database tables already exist
+2025-03-14 11:47:32,900 - __main__ - INFO - Database tables already exist
+2025-03-14 11:47:32,900 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:47:32,918 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:47:32,924 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:47:34,785 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-03-14 11:47:34,798 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:47:34] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:47:39,518 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:47:39] "GET /signup HTTP/1.1" 200 -
+2025-03-14 11:47:55,350 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-03-14 11:47:55,352 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:47:55] "POST /signup HTTP/1.1" 200 -
+2025-03-14 11:52:04,285 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:52:04,412 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:52:05,307 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:05,323 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:05,323 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:52:05,365 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:52:05,369 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:52:30,537 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:52:30,678 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:52:31,499 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:31,504 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:31,505 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:52:31,524 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:52:31,529 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:52:38,584 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:52:38,726 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:52:39,523 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:39,528 - __main__ - INFO - Database tables already exist
+2025-03-14 11:52:39,528 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:52:39,554 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:52:39,559 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:52:54,739 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:52:54] "POST /signup HTTP/1.1" 200 -
+2025-03-14 11:54:56,794 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\config.py', reloading
+2025-03-14 11:54:56,883 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:56:25,970 - __main__ - INFO - Creating database tables...
+2025-03-14 11:56:25,990 - __main__ - INFO - Created all database tables successfully!
+2025-03-14 11:56:25,990 - __main__ - INFO - Database tables initialized without test accounts
+2025-03-14 11:56:26,004 - __main__ - INFO - Database connection test: []
+2025-03-14 11:56:26,011 - __main__ - INFO - Database tables already exist
+2025-03-14 11:56:26,013 - __main__ - INFO - Database connection test: []
+2025-03-14 11:56:26,013 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:56:26,040 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 11:56:26,040 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 11:56:26,041 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:56:26,556 - __main__ - INFO - Database tables already exist
+2025-03-14 11:56:26,567 - __main__ - INFO - Database connection test: []
+2025-03-14 11:56:26,575 - __main__ - INFO - Database tables already exist
+2025-03-14 11:56:26,576 - __main__ - INFO - Database connection test: []
+2025-03-14 11:56:26,576 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:56:26,595 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:56:26,600 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:56:43,965 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:56:43] "POST /signup HTTP/1.1" 200 -
+2025-03-14 11:56:47,134 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:56:47] "GET /login HTTP/1.1" 200 -
+2025-03-14 11:56:54,959 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 11:56:54] "POST /login HTTP/1.1" 200 -
+2025-03-14 11:59:32,400 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\forms.py', reloading
+2025-03-14 11:59:32,520 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:59:33,144 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:33,159 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:33,166 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:33,167 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:33,168 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:59:33,186 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:59:33,190 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:59:35,221 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\forms.py', reloading
+2025-03-14 11:59:35,379 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:59:36,275 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:36,287 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:36,292 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:36,294 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:36,295 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:59:36,331 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:59:36,338 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 11:59:57,502 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 11:59:57,585 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 11:59:58,438 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:58,451 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:58,457 - __main__ - INFO - Database tables already exist
+2025-03-14 11:59:58,458 - __main__ - INFO - Database connection test: []
+2025-03-14 11:59:58,458 - __main__ - INFO - Database initialized successfully!
+2025-03-14 11:59:58,480 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 11:59:58,488 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:00:01,526 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 12:00:01,641 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 12:00:02,483 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:02,505 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:02,520 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:02,523 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:02,524 - __main__ - INFO - Database initialized successfully!
+2025-03-14 12:00:02,550 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 12:00:02,555 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:00:27,705 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 12:00:27,838 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 12:00:28,559 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:28,581 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:28,590 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:28,591 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:28,592 - __main__ - INFO - Database initialized successfully!
+2025-03-14 12:00:28,615 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 12:00:28,619 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:00:47,742 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 12:00:47,880 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 12:00:48,932 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:48,954 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:48,959 - __main__ - INFO - Database tables already exist
+2025-03-14 12:00:48,963 - __main__ - INFO - Database connection test: []
+2025-03-14 12:00:48,964 - __main__ - INFO - Database initialized successfully!
+2025-03-14 12:00:49,016 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 12:00:49,023 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:01:08,154 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 12:01:08,242 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 12:01:08,751 - __main__ - INFO - Database tables already exist
+2025-03-14 12:01:08,760 - __main__ - INFO - Database connection test: []
+2025-03-14 12:01:08,765 - __main__ - INFO - Database tables already exist
+2025-03-14 12:01:08,767 - __main__ - INFO - Database connection test: []
+2025-03-14 12:01:08,767 - __main__ - INFO - Database initialized successfully!
+2025-03-14 12:01:08,782 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 12:01:08,785 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:01:13,824 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 12:01:13,943 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 12:01:14,712 - __main__ - INFO - Database tables already exist
+2025-03-14 12:01:14,736 - __main__ - INFO - Database connection test: []
+2025-03-14 12:01:14,744 - __main__ - INFO - Database tables already exist
+2025-03-14 12:01:14,746 - __main__ - INFO - Database connection test: []
+2025-03-14 12:01:14,746 - __main__ - INFO - Database initialized successfully!
+2025-03-14 12:01:14,777 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 12:01:14,782 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 12:01:25,235 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:01:25] "GET /signup HTTP/1.1" 200 -
+2025-03-14 12:01:53,393 - __main__ - INFO - Signup form data: {'email': 'temp_test@example.com', 'password': 'test_password', 'confirm_password': None, 'name': 'Test User', 'role': 'donor'}
+2025-03-14 12:01:53,529 - __main__ - WARNING - Form validation errors: {'confirm_password': ['This field is required.']}
+2025-03-14 12:01:53,536 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:01:53] "POST /signup HTTP/1.1" 200 -
+2025-03-14 12:04:49,061 - __main__ - INFO - Signup form data: {'email': 'temp_test@example.com', 'password': 'test_password', 'confirm_password': None, 'name': 'Test User', 'role': 'donor'}
+2025-03-14 12:04:49,070 - __main__ - WARNING - Form validation errors: {'confirm_password': ['This field is required.']}
+2025-03-14 12:04:49,118 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:04:49] "POST /signup HTTP/1.1" 200 -
+2025-03-14 12:05:03,214 - __main__ - INFO - Signup form data: {'email': 'temp_test@example.com', 'password': 'test_password', 'confirm_password': 'test_password', 'name': 'Test User', 'role': 'donor'}
+2025-03-14 12:05:03,551 - __main__ - INFO - User created: temp_test@example.com, ID: 1
+2025-03-14 12:05:03,557 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:03] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-03-14 12:05:03,580 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:03] "GET /login HTTP/1.1" 200 -
+2025-03-14 12:05:09,274 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 12:05:09,276 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 12:05:09,378 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:09] "GET / HTTP/1.1" 200 -
+2025-03-14 12:05:19,816 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:19] "GET / HTTP/1.1" 200 -
+2025-03-14 12:05:30,396 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:05:30] "GET /donate HTTP/1.1" 200 -
+2025-03-14 12:51:32,328 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:51:32] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-03-14 12:51:32,375 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:51:32] "GET /login HTTP/1.1" 200 -
+2025-03-14 12:52:25,301 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 12:52:25,302 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:52:25] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 12:52:25,319 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 12:52:25] "GET / HTTP/1.1" 200 -
+2025-03-14 13:06:09,613 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\models.py', reloading
+2025-03-14 13:06:09,846 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:06:10,609 - __main__ - INFO - Database tables already exist
+2025-03-14 13:06:10,618 - __main__ - INFO - Database connection test: [(<User 1>,)]
+2025-03-14 13:06:10,623 - __main__ - INFO - Database tables already exist
+2025-03-14 13:06:10,624 - __main__ - INFO - Database connection test: [(<User 1>,)]
+2025-03-14 13:06:10,624 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:06:10,645 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:06:10,651 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:24:33,609 - __main__ - INFO - Creating database tables...
+2025-03-14 13:24:33,632 - __main__ - INFO - Created all database tables successfully!
+2025-03-14 13:24:33,634 - __main__ - INFO - Database tables initialized without test accounts
+2025-03-14 13:24:33,645 - __main__ - INFO - Database connection test: []
+2025-03-14 13:24:33,649 - __main__ - INFO - Database tables already exist
+2025-03-14 13:24:33,650 - __main__ - INFO - Database connection test: []
+2025-03-14 13:24:33,651 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:24:33,695 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 13:24:33,696 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 13:24:33,697 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:24:34,430 - __main__ - INFO - Database tables already exist
+2025-03-14 13:24:34,439 - __main__ - INFO - Database connection test: []
+2025-03-14 13:24:34,444 - __main__ - INFO - Database tables already exist
+2025-03-14 13:24:34,445 - __main__ - INFO - Database connection test: []
+2025-03-14 13:24:34,446 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:24:34,472 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:24:34,486 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:24:36,103 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 13:24:36] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 13:24:36,131 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 13:24:36] "GET /login HTTP/1.1" 200 -
+2025-03-14 13:24:39,540 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 13:24:39] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-03-14 13:24:39,565 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 13:24:39] "GET /login HTTP/1.1" 200 -
+2025-03-14 13:26:20,635 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 13:26:20] "GET /signup HTTP/1.1" 200 -
+2025-03-14 13:32:16,488 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:32:16,589 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:32:17,339 - __main__ - INFO - Database tables already exist
+2025-03-14 13:32:17,349 - __main__ - INFO - Database connection test: []
+2025-03-14 13:32:17,354 - __main__ - INFO - Database tables already exist
+2025-03-14 13:32:17,354 - __main__ - INFO - Database connection test: []
+2025-03-14 13:32:17,354 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:32:17,369 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:32:17,375 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:33:05,708 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:33:05,806 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:33:06,640 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:06,652 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:06,661 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:06,662 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:06,663 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:33:06,723 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:33:06,730 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:33:07,750 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:33:07,920 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:33:08,788 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:08,812 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:08,831 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:08,833 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:08,834 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:33:08,871 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:33:08,880 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:33:24,998 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:33:25,133 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:33:25,913 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:25,930 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:25,938 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:25,940 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:25,942 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:33:25,974 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:33:25,979 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:33:34,039 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:33:34,204 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:33:35,075 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:35,094 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:35,102 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:35,105 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:35,105 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:33:35,134 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:33:35,141 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:33:48,230 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:33:48,312 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:33:48,884 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:48,894 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:48,899 - __main__ - INFO - Database tables already exist
+2025-03-14 13:33:48,899 - __main__ - INFO - Database connection test: []
+2025-03-14 13:33:48,900 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:33:48,915 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:33:48,920 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:37:46,628 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:37:46,723 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:37:47,548 - __main__ - INFO - Database tables already exist
+2025-03-14 13:37:47,560 - __main__ - INFO - Database connection test: []
+2025-03-14 13:37:47,567 - __main__ - INFO - Database tables already exist
+2025-03-14 13:37:47,570 - __main__ - INFO - Database connection test: []
+2025-03-14 13:37:47,572 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:37:47,594 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:37:47,600 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 13:37:48,628 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 13:37:48,732 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 13:37:49,537 - __main__ - INFO - Database tables already exist
+2025-03-14 13:37:49,561 - __main__ - INFO - Database connection test: []
+2025-03-14 13:37:49,582 - __main__ - INFO - Database tables already exist
+2025-03-14 13:37:49,584 - __main__ - INFO - Database connection test: []
+2025-03-14 13:37:49,585 - __main__ - INFO - Database initialized successfully!
+2025-03-14 13:37:49,642 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 13:37:49,655 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 18:20:51,661 - __main__ - INFO - Database tables already exist
+2025-03-14 19:34:58,106 - __main__ - INFO - Database tables already exist
+2025-03-14 19:37:01,529 - __main__ - INFO - Database tables already exist
+2025-03-14 19:39:07,962 - __main__ - INFO - Database tables already exist
+2025-03-14 19:40:16,495 - __main__ - INFO - Database tables already exist
+2025-03-14 19:40:16,504 - __main__ - INFO - Database tables already exist
+2025-03-14 19:40:16,504 - __main__ - INFO - Database initialized successfully!
+2025-03-14 19:40:16,573 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 19:40:16,574 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 19:40:16,576 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 19:40:17,217 - __main__ - INFO - Database tables already exist
+2025-03-14 19:40:17,227 - __main__ - INFO - Database tables already exist
+2025-03-14 19:40:17,227 - __main__ - INFO - Database initialized successfully!
+2025-03-14 19:40:17,263 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 19:40:17,279 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 19:40:20,761 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:20] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 19:40:20,804 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:20] "GET /login HTTP/1.1" 200 -
+2025-03-14 19:40:21,409 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-14 19:40:23,418 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:23] "GET /login HTTP/1.1" 200 -
+2025-03-14 19:40:25,552 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:25] "GET /login HTTP/1.1" 200 -
+2025-03-14 19:40:25,778 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:40:25] "GET /login HTTP/1.1" 200 -
+2025-03-14 19:43:42,962 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:43:42] "GET /login HTTP/1.1" 200 -
+2025-03-14 19:46:29,612 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\forms.py', reloading
+2025-03-14 19:46:29,712 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 19:46:30,437 - __main__ - INFO - Database tables already exist
+2025-03-14 19:46:30,442 - __main__ - INFO - Database tables already exist
+2025-03-14 19:46:30,443 - __main__ - INFO - Database initialized successfully!
+2025-03-14 19:46:30,469 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 19:46:30,474 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 19:46:35,529 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 19:46:35] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:17,473 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:17] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:18,728 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:18] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:19,288 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:19] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:19,478 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:19] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:19,837 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:19] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:20,028 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:20] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:20,205 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:20] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:20,387 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:20] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:20,710 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:20] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:40,259 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:40] "GET /login HTTP/1.1" 200 -
+2025-03-14 20:00:50,076 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:50] "GET /signup HTTP/1.1" 200 -
+2025-03-14 20:00:58,312 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:58] "GET /signup HTTP/1.1" 200 -

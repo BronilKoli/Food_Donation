@@ -1,21 +1,33 @@
 {% extends "base.html" %}
+
+{% block title %}Organization Dashboard{% endblock %}
+
 {% block content %}
 <div class="space-y-6">
     <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
             <i class="fas fa-hand-holding-heart mr-2"></i>Available Donations
         </h1>
         <div class="flex space-x-4">
             <div class="relative">
                 <input type="text" placeholder="Search donations..." 
-                       class="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                       class="pl-10 pr-4 py-2 border dark:border-gray-600 rounded-lg 
+                              focus:ring-2 focus:ring-blue-500 
+                              bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                              placeholder-gray-500 dark:placeholder-gray-400">
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400 dark:text-gray-500"></i>
             </div>
-            <select class="border rounded-lg px-4 py-2">
+            <select class="border dark:border-gray-600 rounded-lg px-4 py-2 
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                 <option value="">All Categories</option>
-                <option value="meals">Prepared Meals</option>
-                <option value="groceries">Groceries</option>
-                <option value="produce">Fresh Produce</option>
+                <option value="food">Food</option>
+                <option value="clothing">Clothing</option>
+                <option value="furniture">Furniture</option>
+                <option value="electronics">Electronics</option>
+                <option value="books">Books</option>
+                <option value="toys">Toys</option>
+                <option value="household">Household Items</option>
+                <option value="other">Other</option>
             </select>
         </div>
     </div>
@@ -23,16 +35,21 @@
     <!-- Donation Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for donation in available_donations %}
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-white dark:bg-dark-card rounded-lg shadow-md overflow-hidden transition-colors duration-200">
             <div class="p-6 space-y-4">
                 <div class="flex justify-between items-start">
-                    <h3 class="text-xl font-semibold text-gray-800">{{ donation.food_name }}</h3>
-                    <span class="px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">{{ donation.item_name }}</h3>
+                        <span class="inline-block px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mt-1">
+                            {{ donation.category|title }}
+                        </span>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
                         <i class="fas fa-clock mr-1"></i>Available
                     </span>
                 </div>
                 
-                <div class="space-y-3 text-gray-600">
+                <div class="space-y-3 text-gray-600 dark:text-gray-400">
                     <p class="flex items-center">
                         <i class="fas fa-user-circle w-5"></i>
                         <span>{{ donation.donor.name }}</span>
@@ -45,18 +62,24 @@
                         <i class="fas fa-map-marker-alt w-5"></i>
                         <span>{{ donation.location }}</span>
                     </p>
+                    {% if donation.expiry_date %}
                     <p class="flex items-center">
                         <i class="fas fa-calendar-alt w-5"></i>
                         <span>Expires: {{ donation.expiry_date.strftime('%Y-%m-%d') }}</span>
                     </p>
+                    {% endif %}
+                    {% if donation.description %}
+                    <p class="flex items-start">
+                        <i class="fas fa-info-circle w-5 mt-1"></i>
+                        <span>{{ donation.description|truncate(100) }}</span>
+                    </p>
+                    {% endif %}
                 </div>
 
-                <form method="POST" action="{{ url_for('request_food', donation_id=donation.id) }}">
-                    <button type="submit" 
-                            class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 
-                                   rounded-lg transition duration-200 flex items-center justify-center space-x-2">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        <span>Request Food</span>
+                <form method="POST" action="{{ url_for('request_item', donation_id=donation.id) }}">
+                    <button type="submit" class="btn btn-primary w-full">
+                        <i class="fas fa-hand-holding-heart mr-2"></i>
+                        <span>Request Item</span>
                     </button>
                 </form>
             </div>
@@ -67,12 +90,84 @@
     <!-- Empty State -->
     {% if not available_donations %}
     <div class="text-center py-12">
-        <div class="inline-block p-4 rounded-full bg-gray-100 mb-4">
-            <i class="fas fa-box-open text-4xl text-gray-400"></i>
+        <div class="inline-block p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+            <i class="fas fa-box-open text-4xl text-gray-400 dark:text-gray-500"></i>
         </div>
-        <h3 class="text-xl font-medium text-gray-600">No donations available</h3>
-        <p class="text-gray-500 mt-2">Check back later for new donations</p>
+        <h3 class="text-xl font-medium text-gray-600 dark:text-gray-300">No donations available</h3>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">Check back later for new donations</p>
     </div>
     {% endif %}
+    
+    <!-- My Requests Section -->
+    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
+        <div class="p-6 border-b dark:border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-semibold dark:text-white">
+                <i class="fas fa-history mr-2"></i>My Recent Requests
+            </h2>
+            <a href="{{ url_for('my_requests') }}" class="text-blue-500 hover:underline">
+                View All
+            </a>
+        </div>
+        <div class="p-6">
+            {% if my_requests %}
+            <div class="space-y-4">
+                {% for request in my_requests %}
+                <div class="border dark:border-gray-700 rounded-lg p-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-semibold dark:text-white">{{ request.donation.item_name }}</h3>
+                            <span class="inline-block px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mt-1">
+                                {{ request.donation.category|title }}
+                            </span>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                Status: 
+                                <span class="
+                                    {% if request.status == 'pending' %}text-yellow-600 dark:text-yellow-400
+                                    {% elif request.status == 'approved' %}text-green-600 dark:text-green-400
+                                    {% elif request.status == 'collected' %}text-blue-600 dark:text-blue-400
+                                    {% else %}text-red-600 dark:text-red-400{% endif %}
+                                ">
+                                    {{ request.status|title }}
+                                </span>
+                            </p>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            {{ request.created_at.strftime('%Y-%m-%d') }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-600 dark:text-gray-400 text-center py-4">You haven't made any requests yet</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Volunteer Management Section -->
+    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
+        <div class="p-6 border-b dark:border-gray-700">
+            <h2 class="text-xl font-semibold dark:text-white">
+                <i class="fas fa-users mr-2"></i>Assigned Volunteers
+            </h2>
+        </div>
+        <div class="p-6">
+            {% if volunteers %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for volunteer in volunteers %}
+                <div class="border dark:border-gray-700 rounded-lg p-4">
+                    <h3 class="font-semibold dark:text-white">{{ volunteer.name }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ volunteer.contact }}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ volunteer.address }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <p class="text-gray-600 dark:text-gray-400">No volunteers assigned to your organization</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

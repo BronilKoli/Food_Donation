@@ -1,12 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy import desc
 from sqlalchemy.exc import IntegrityError
 import logging
-from models import db, User, FoodDonation, FoodRequest
+from models import db, User, Donation, DonationRequest, Volunteer
+from forms import LoginForm, SignupForm, DonationForm, VolunteerForm, UserPreferencesForm
 from config import Config
 import os
 
@@ -25,6 +26,9 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Disable CSRF protection for development
+app.config['WTF_CSRF_ENABLED'] = False
+
 # Initialize database
 db.init_app(app)
 
@@ -32,47 +36,47 @@ db.init_app(app)
 def init_db():
     with app.app_context():
         try:
-            # Check if tables exist
+            # Check if database directory is writable
+            db_path = app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', '')
+            db_dir = os.path.dirname(db_path)
+            
+            if db_dir and not os.access(db_dir, os.W_OK):
+                logger.error(f"Database directory {db_dir} is not writable")
+                raise PermissionError(f"Database directory {db_dir} is not writable")
+            
+            # Check if database file exists and is writable
+            if os.path.exists(db_path) and not os.access(db_path, os.W_OK):
+                logger.error(f"Database file {db_path} is not writable")
+                raise PermissionError(f"Database file {db_path} is not writable")
+            
+            # Check tables
             inspect = db.inspect(db.engine)
             tables_exist = inspect.get_table_names()
             
             if not tables_exist:
-                logger.info("No tables found. Creating database tables...")
+                logger.info("Creating database tables...")
                 db.create_all()
-                logger.info("Created all database tables successfully!")
-                
-                # Create test users if needed
-                if app.config['DEBUG']:
-                    # Check if test users already exist
-                    test_donor = User.query.filter_by(email='donor@test.com').first()
-                    test_recipient = User.query.filter_by(email='recipient@test.com').first()
-                    
-                    if not test_donor and not test_recipient:
-                        test_donor = User(
-                            email='donor@test.com',
-                            password=generate_password_hash('password'),
-                            name='Test Donor',
-                            role='donor'
-                        )
-                        test_recipient = User(
-                            email='recipient@test.com',
-                            password=generate_password_hash('password'),
-                            name='Test Recipient',
-                            role='recipient'
-                        )
-                        db.session.add(test_donor)
-                        db.session.add(test_recipient)
-                        db.session.commit()
-                        logger.info("Created test users")
+                logger.info("Database tables created successfully!")
             else:
                 logger.info("Database tables already exist")
                 
         except Exception as e:
-            logger.error(f"Error initializing database: {str(e)}")
+            logger.error(f"Database initialization error: {str(e)}")
             raise e
 
 # Initialize database when app starts
-init_db()
+with app.app_context():
+    init_db()
+
+# Context processor to add theme preference to all templates
+@app.context_processor
+def inject_theme():
+    theme = 'system'  # Default
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        if user:
+            theme = user.theme_preference
+    return {'theme_preference': theme}
 
 # Login decorator
 def login_required(f):
@@ -84,13 +88,13 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Role-based access decorator
-def role_required(role):
+# Update role_required decorator to handle multiple roles
+def role_required(roles):
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
-            if session.get('role') != role:
-                flash(f'Only {role}s can access this page.', 'danger')
+            if session.get('role') not in (roles if isinstance(roles, list) else [roles]):
+                flash('You do not have permission to access this page.', 'danger')
                 return redirect(url_for('dashboard'))
             return f(*args, **kwargs)
         return decorated_function
@@ -99,143 +103,149 @@ def role_required(role):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     try:
-        logger.info("Accessing signup route")
-        
         if 'user_id' in session:
-            logger.info("User already logged in, redirecting to dashboard")
             return redirect(url_for('dashboard'))
             
+        form = SignupForm(csrf_enabled=False)
+        
         if request.method == 'POST':
-            try:
-                # Extract and validate form data
-                email = request.form.get('email', '').lower().strip()
-                password = request.form.get('password', '')
-                name = request.form.get('name', '').strip()
-                role = request.form.get('role', '')
-
-                # Validate required fields
-                if not all([email, password, name, role]):
-                    flash("All fields are required!", "danger")
-                    return render_template('signup.html')
-
-                # Email format validation (basic)
-                if '@' not in email or '.' not in email:
-                    flash("Please enter a valid email address.", "danger")
-                    return render_template('signup.html')
-
-                # Password length validation
-                if len(password) < 6:
-                    flash("Password must be at least 6 characters long.", "danger")
-                    return render_template('signup.html')
-
+            logger.info(f"Signup form data: {form.data}")
+            
+            if form.validate_on_submit():
+                email = form.email.data.lower().strip()
+                
                 # Check if email already exists
-                existing_user = User.query.filter_by(email=email).first()
-                if existing_user:
-                    flash('Email already exists.', 'danger')
-                    return render_template('signup.html')
-
-                # Validate role
-                if role not in ['donor', 'recipient']:
-                    flash('Invalid role selected.', 'danger')
-                    return render_template('signup.html')
-
-                # Create new user
+                if User.query.filter_by(email=email).first():
+                    flash('Email already registered. Please login.', 'danger')
+                    return render_template('signup.html', form=form)
+                    
+                # Create user
                 new_user = User(
                     email=email,
-                    password=generate_password_hash(password),
-                    name=name,
-                    role=role
+                    password=generate_password_hash(form.password.data),
+                    name=form.name.data.strip(),
+                    role=form.role.data
                 )
-
                 db.session.add(new_user)
-                db.session.commit()
+                db.session.flush()  # Get user ID without full commit
                 
-                logger.info(f"New {role} registered: {email}")
-                flash('Account created successfully! Please login.', 'success')
+                # Create volunteer profile if needed
+                if form.role.data == 'volunteer':
+                    volunteer = Volunteer(
+                        name=form.name.data.strip(),
+                        contact=request.form.get('contact'),
+                        address=request.form.get('address'),
+                        user_id=new_user.id
+                    )
+                    db.session.add(volunteer)
+                    
+                db.session.commit()
+                logger.info(f"User created: {email}, ID: {new_user.id}")
+                flash('Account created successfully!', 'success')
                 return redirect(url_for('login'))
+            else:
+                logger.warning(f"Form validation errors: {form.errors}")
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        flash(f"{field}: {error}", 'danger')
 
-            except Exception as e:
-                db.session.rollback()
-                logger.error(f"Error during signup: {str(e)}")
-                flash('An error occurred during registration. Please try again.', 'danger')
+        return render_template('signup.html', form=form)
 
-        # GET request - show the signup form
-        logger.info("Rendering signup template")
-        return render_template('signup.html')
     except Exception as e:
-        logger.error(f"Error in signup route: {str(e)}")
-        return f"Error: {str(e)}", 500
+        logger.error(f"Signup error: {str(e)}")
+        db.session.rollback()
+        flash(f'Error during signup: {str(e)}', 'danger')
+        return render_template('signup.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     try:
-        # Clear any existing session first
         session.clear()
+        form = LoginForm(csrf_enabled=False)
         
-        logger.info("Accessing login route")
-
-        if request.method == 'POST':
-            email = request.form.get('email', '').lower().strip()
-            password = request.form.get('password', '')
-
-            if not email or not password:
-                flash('Please provide both email and password.', 'danger')
-                return render_template('login.html')
-
+        if request.method == 'POST' and form.validate_on_submit():
+            email = form.email.data.lower().strip()
             user = User.query.filter_by(email=email).first()
             
-            if user and check_password_hash(user.password, password):
+            if user and check_password_hash(user.password, form.password.data):
                 session['user_id'] = user.id
                 session['role'] = user.role
                 session['user_name'] = user.name
+                session['theme'] = user.theme_preference
                 
                 logger.info(f"User logged in successfully: {email}")
                 flash('Login successful!', 'success')
                 return redirect(url_for('dashboard'))
+            else:
+                logger.warning(f"Failed login attempt for email: {email}")
+                flash('Invalid email or password.', 'danger')
             
-            flash('Invalid email or password.', 'danger')
-            return render_template('login.html')
-
-        # GET request
-        return render_template('login.html')
+        return render_template('login.html', form=form)
 
     except Exception as e:
         logger.error(f"Error in login route: {str(e)}")
         flash('An error occurred. Please try again.', 'danger')
-        return render_template('login.html')
+        return render_template('login.html', form=form)
 
+# Update dashboard route to handle all roles
 @app.route('/')
 @login_required
 def dashboard():
     try:
-        if session['role'] == 'donor':
-            donations = FoodDonation.query.filter_by(user_id=session['user_id'])
+        role = session['role']
+        
+        if role == 'donor':
+            donations = Donation.query.filter_by(user_id=session['user_id'])
             stats = {
                 'total_donations': donations.count(),
                 'active_donations': donations.filter_by(status='available').count(),
-                'people_helped': FoodRequest.query.join(FoodDonation).filter(
-                    FoodDonation.user_id == session['user_id'],
-                    FoodRequest.status == 'collected'
+                'people_helped': DonationRequest.query.join(Donation).filter(
+                    Donation.user_id == session['user_id'],
+                    DonationRequest.status == 'collected'
                 ).count()
             }
-            recent_donations = donations.order_by(
-                desc(FoodDonation.created_at)
-            ).limit(6).all()
+            recent_donations = donations.order_by(desc(Donation.created_at)).limit(6).all()
             
             return render_template('donor_dashboard.html',
                                  stats=stats,
                                  recent_donations=recent_donations)
-        else:
-            available_donations = FoodDonation.query.filter_by(
-                status='available'
-            ).order_by(FoodDonation.expiry_date).all()
-            my_requests = FoodRequest.query.filter_by(
-                requester_id=session['user_id']
-            ).order_by(desc(FoodRequest.created_at)).limit(5).all()
+                                 
+        elif role == 'organization':
+            available_donations = Donation.query.filter_by(status='available').order_by(Donation.expiry_date).all()
+            my_requests = DonationRequest.query.filter_by(requester_id=session['user_id']).order_by(desc(DonationRequest.created_at)).limit(5).all()
+            assigned_volunteers = Volunteer.query.filter_by(assigned_agent_id=session['user_id']).all()
             
-            return render_template('receiver_dashboard.html',
+            return render_template('organization_dashboard.html',
                                  available_donations=available_donations,
-                                 my_requests=my_requests)
+                                 my_requests=my_requests,
+                                 volunteers=assigned_volunteers)
+        
+        elif role == 'volunteer':
+            volunteer = Volunteer.query.filter_by(user_id=session['user_id']).first()
+            assigned_requests = DonationRequest.query.filter_by(volunteer_id=volunteer.id if volunteer else None).all()
+            
+            return render_template('volunteer_dashboard.html',
+                                 volunteer=volunteer,
+                                 assigned_requests=assigned_requests)
+                                 
+        elif role == 'admin':
+            stats = {
+                'total_donations': Donation.query.count(),
+                'pending_requests': DonationRequest.query.filter_by(status='pending').count(),
+                'total_volunteers': Volunteer.query.count(),
+                'total_users': User.query.count()
+            }
+            pending_requests = DonationRequest.query.filter_by(status='pending').all()
+            volunteers = Volunteer.query.all()
+            
+            return render_template('admin_dashboard.html',
+                                 stats=stats,
+                                 pending_requests=pending_requests,
+                                 volunteers=volunteers)
+                                 
+        else:
+            flash('Invalid user role', 'danger')
+            return redirect(url_for('logout'))
             
     except Exception as e:
         logger.error(f"Dashboard error: {str(e)}")
@@ -246,63 +256,70 @@ def dashboard():
 @login_required
 @role_required('donor')
 def donate_food():
-    if request.method == 'POST':
+    form = DonationForm()
+    
+    if request.method == 'POST' and form.validate_on_submit():
         try:
-            donation = FoodDonation(
-                food_name=request.form['food_name'],
-                quantity=request.form['quantity'],
-                location=request.form['location'],
-                expiry_date=datetime.strptime(request.form['expiry_date'], '%Y-%m-%d'),
-                user_id=session['user_id']
+            donation = Donation(
+                item_name=form.item_name.data,
+                donation_type=form.donation_type.data,
+                quantity=form.quantity.data,
+                location=form.location.data,
+                expiry_date=form.expiry_date.data,
+                description=form.description.data,
+                category=form.category.data,
+                user_id=session['user_id'],
+                status='available'
             )
             db.session.add(donation)
             db.session.commit()
-            flash('Food donation added successfully!', 'success')
+            flash('Donation added successfully!', 'success')
             return redirect(url_for('manage_donations'))
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Donation error: {str(e)}")
             flash('Error adding donation.', 'danger')
             
-    return render_template('donate_food.html')
+    return render_template('donate_food.html', form=form)
 
 @app.route('/manage-donations')
 @login_required
 @role_required('donor')
 def manage_donations():
-    donations = FoodDonation.query.filter_by(
+    donations = Donation.query.filter_by(
         user_id=session['user_id']
-    ).order_by(desc(FoodDonation.created_at)).all()
+    ).order_by(desc(Donation.created_at)).all()
     return render_template('manage_donations.html', donations=donations)
 
 @app.route('/browse-donations')
 @login_required
-@role_required('recipient')
+@role_required(['organization', 'volunteer'])
 def browse_donations():
-    donations = FoodDonation.query.filter_by(
+    donations = Donation.query.filter_by(
         status='available'
-    ).order_by(FoodDonation.expiry_date).all()
+    ).order_by(Donation.expiry_date).all()
     return render_template('browse_donations.html', donations=donations)
 
 @app.route('/my-requests')
 @login_required
-@role_required('recipient')
+@role_required('organization')  # Fix role name: 'recipient' -> 'organization'
 def my_requests():
-    requests = FoodRequest.query.filter_by(
+    requests = DonationRequest.query.filter_by(
         requester_id=session['user_id']
-    ).order_by(desc(FoodRequest.created_at)).all()
+    ).order_by(desc(DonationRequest.created_at)).all()
     return render_template('my_requests.html', requests=requests)
 
 @app.route('/request-food/<int:donation_id>', methods=['POST'])
 @login_required
-@role_required('recipient')
+@role_required(['organization', 'volunteer'])
 def request_food(donation_id):
     try:
-        donation = FoodDonation.query.get_or_404(donation_id)
+        donation = Donation.query.get_or_404(donation_id)
         if donation.status != 'available':
             flash('This donation is no longer available.', 'danger')
             return redirect(url_for('browse_donations'))
             
-        existing_request = FoodRequest.query.filter_by(
+        existing_request = DonationRequest.query.filter_by(
             donation_id=donation_id,
             requester_id=session['user_id']
         ).first()
@@ -311,7 +328,7 @@ def request_food(donation_id):
             flash('You have already requested this donation.', 'warning')
             return redirect(url_for('browse_donations'))
             
-        request = FoodRequest(
+        request = DonationRequest(
             donation_id=donation_id,
             requester_id=session['user_id']
         )
@@ -320,6 +337,7 @@ def request_food(donation_id):
         flash('Request submitted successfully!', 'success')
         
     except Exception as e:
+        db.session.rollback()
         logger.error(f"Food request error: {str(e)}")
         flash('Error submitting request.', 'danger')
         
@@ -327,12 +345,13 @@ def request_food(donation_id):
 
 @app.route('/update-request/<int:request_id>/<string:status>')
 @login_required
-@role_required('donor')
+@role_required(['admin', 'donor'])
 def update_request(request_id, status):
     try:
-        food_request = FoodRequest.query.get_or_404(request_id)
-        # Verify the donor owns the donation
-        if food_request.donation.user_id != session['user_id']:
+        food_request = DonationRequest.query.get_or_404(request_id)
+        
+        # Verify authorization
+        if session['role'] == 'donor' and food_request.donation.user_id != session['user_id']:
             flash('Unauthorized action.', 'danger')
             return redirect(url_for('manage_donations'))
             
@@ -341,10 +360,11 @@ def update_request(request_id, status):
             return redirect(url_for('manage_donations'))
             
         food_request.status = status
-        if status == 'collected':
+        if status == 'approved':
+            food_request.donation.status = 'reserved'
+        elif status == 'collected':
             food_request.donation.status = 'collected'
         elif status == 'denied':
-            # If the request is denied, allow others to request it
             food_request.donation.status = 'available'
             
         db.session.commit()
@@ -357,9 +377,9 @@ def update_request(request_id, status):
         flash(status_messages.get(status, 'Request updated successfully!'), 'success')
         
     except Exception as e:
+        db.session.rollback()
         logger.error(f"Update request error: {str(e)}")
         flash('Error updating request.', 'danger')
-        db.session.rollback()
         
     return redirect(url_for('manage_donations'))
 
@@ -367,36 +387,33 @@ def update_request(request_id, status):
 @login_required
 @role_required('donor')
 def edit_donation(id):
-    donation = FoodDonation.query.get_or_404(id)
-    
+    donation = Donation.query.get_or_404(id)
     
     if donation.user_id != session['user_id']:
         flash('You can only edit your own donations.', 'danger')
         return redirect(url_for('manage_donations'))
-        
-    if request.method == 'POST':
+    
+    form = DonationForm(obj=donation)
+    
+    if request.method == 'POST' and form.validate_on_submit():
         try:
-            donation.food_name = request.form['food_name']
-            donation.quantity = request.form['quantity']
-            donation.location = request.form['location']
-            donation.expiry_date = datetime.strptime(request.form['expiry_date'], '%Y-%m-%d')
+            form.populate_obj(donation)
             db.session.commit()
             flash('Donation updated successfully!', 'success')
             return redirect(url_for('manage_donations'))
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in edit_donation: {str(e)}")
             flash('Error updating donation. Please try again.', 'danger')
             
-    return render_template('edit_donation.html', donation=donation)
+    return render_template('edit_donation.html', donation=donation, form=form)
 
 @app.route('/delete-donation/<int:id>')
 @login_required
+@role_required('donor')
 def delete_donation(id):
-    if session['role'] != 'donor':
-        return redirect(url_for('dashboard'))
-        
     try:
-        donation = FoodDonation.query.get_or_404(id)
+        donation = Donation.query.get_or_404(id)
         if donation.user_id != session['user_id']:
             flash('You can only delete your own donations.', 'danger')
             return redirect(url_for('manage_donations'))
@@ -406,10 +423,28 @@ def delete_donation(id):
         flash('Donation deleted successfully!', 'success')
         
     except Exception as e:
+        db.session.rollback()
         logger.error(f"Error in delete_donation: {str(e)}")
         flash('Error deleting donation. Please try again.', 'danger')
         
     return redirect(url_for('manage_donations'))
+
+@app.route('/set-theme', methods=['POST'])
+@login_required
+def set_theme():
+    try:
+        theme = request.json.get('theme')
+        if theme in ['light', 'dark', 'system']:
+            user = User.query.get(session['user_id'])
+            user.theme_preference = theme
+            session['theme'] = theme
+            db.session.commit()
+            return jsonify({'success': True})
+        return jsonify({'success': False, 'error': 'Invalid theme'}), 400
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error setting theme: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/logout')
 def logout():
@@ -417,15 +452,192 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/debug-session')
-def debug_session():
-    if app.debug:
-        return {
-            'session': dict(session),
-            'user_id_in_session': 'user_id' in session,
-            'current_user': session.get('user_id')
+# Add new routes for volunteer management
+@app.route('/assign-volunteer/<int:volunteer_id>/<int:request_id>')
+@login_required
+@role_required(['admin', 'organization'])
+def assign_volunteer(volunteer_id, request_id):
+    try:
+        volunteer = Volunteer.query.get_or_404(volunteer_id)
+        request = DonationRequest.query.get_or_404(request_id)
+        
+        if session['role'] == 'organization' and volunteer.assigned_agent_id != session['user_id']:
+            flash('You can only assign volunteers assigned to your organization.', 'danger')
+            return redirect(url_for('dashboard'))
+            
+        request.volunteer_id = volunteer.id
+        db.session.commit()
+        flash('Volunteer assigned successfully!', 'success')
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error assigning volunteer: {str(e)}")
+        flash('Error assigning volunteer.', 'danger')
+        
+    return redirect(url_for('dashboard'))
+
+@app.route('/assign-volunteer/<int:volunteer_id>', methods=['POST'])
+@login_required
+@role_required(['admin', 'organization'])
+def assign_volunteer_to_org(volunteer_id):
+    try:
+        volunteer = Volunteer.query.get_or_404(volunteer_id)
+        
+        # For organization users, they can only assign volunteers to themselves
+        if session['role'] == 'organization':
+            volunteer.assigned_agent_id = session['user_id']
+            flash('Volunteer assigned to your organization successfully!', 'success')
+        # For admin users, they can assign to any organization
+        else:
+            organization_id = request.form.get('organization_id')
+            if not organization_id:
+                flash('Please select an organization to assign the volunteer.', 'danger')
+                return redirect(url_for('manage_volunteers'))
+                
+            volunteer.assigned_agent_id = organization_id
+            flash('Volunteer assigned to organization successfully!', 'success')
+        
+        db.session.commit()
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error assigning volunteer: {str(e)}")
+        flash('Error assigning volunteer.', 'danger')
+        
+    return redirect(url_for('manage_volunteers'))
+
+# Add admin routes
+@app.route('/admin')  # Keep only this route for admin dashboard
+@login_required
+@role_required('admin')
+def admin_dashboard():
+    """Admin dashboard with system overview and management options"""
+    try:
+        # Get system statistics
+        stats = {
+            'total_donations': Donation.query.count(),
+            'active_donations': Donation.query.filter_by(status='available').count(),
+            'total_requests': DonationRequest.query.count(),
+            'pending_requests': DonationRequest.query.filter_by(status='pending').count(),
+            'total_users': User.query.count(),
+            'total_volunteers': Volunteer.query.count()
         }
-    return "Debug endpoint disabled in production"
+        
+        # Get recent activity
+        recent_donations = Donation.query.order_by(desc(Donation.created_at)).limit(5).all()
+        recent_requests = DonationRequest.query.order_by(desc(DonationRequest.created_at)).limit(5).all()
+        
+        # Get user counts by role
+        role_counts = db.session.query(
+            User.role, 
+            db.func.count(User.id)
+        ).group_by(User.role).all()
+        
+        return render_template(
+            'admin_dashboard.html',
+            stats=stats,
+            recent_donations=recent_donations,
+            recent_requests=recent_requests,
+            role_counts=dict(role_counts)
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in admin dashboard: {str(e)}")
+        flash('Error loading admin dashboard', 'danger')
+        return redirect(url_for('dashboard'))
+
+# Add volunteer management routes
+@app.route('/manage-volunteers', methods=['GET', 'POST'])
+@login_required
+@role_required(['admin', 'organization'])
+def manage_volunteers():
+    """Manage volunteer assignments and view volunteer details"""
+    try:
+        if request.method == 'POST':
+            volunteer_id = request.form.get('volunteer_id')
+            action = request.form.get('action')
+            
+            volunteer = Volunteer.query.get_or_404(volunteer_id)
+            
+            if action == 'assign':
+                if session['role'] == 'organization':
+                    volunteer.assigned_agent_id = session['user_id']
+                else:  # admin
+                    org_id = request.form.get('organization_id')
+                    if not org_id:
+                        flash('Please select an organization', 'danger')
+                        return redirect(url_for('manage_volunteers'))
+                    volunteer.assigned_agent_id = org_id
+                flash('Volunteer assigned successfully!', 'success')
+                
+            elif action == 'unassign':
+                if session['role'] == 'organization' and volunteer.assigned_agent_id != session['user_id']:
+                    flash('Unauthorized action', 'danger')
+                else:
+                    volunteer.assigned_agent_id = None
+                    flash('Volunteer unassigned successfully!', 'success')
+                    
+            db.session.commit()
+            
+        # Get volunteers based on role
+        if session['role'] == 'admin':
+            volunteers = Volunteer.query.all()
+            organizations = User.query.filter_by(role='organization').all()
+        else:
+            volunteers = Volunteer.query.filter_by(assigned_agent_id=session['user_id']).all()
+            organizations = None
+            
+        return render_template(
+            'manage_volunteers.html',
+            volunteers=volunteers,
+            organizations=organizations
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in manage_volunteers: {str(e)}")
+        db.session.rollback()
+        flash('An error occurred while managing volunteers', 'danger')
+        return redirect(url_for('dashboard'))
+
+@app.route('/handle-request/<int:request_id>', methods=['POST'])
+@login_required
+@role_required(['admin', 'donor'])
+def handle_request(request_id):
+    """Handle donation requests (approve/deny/complete)"""
+    try:
+        request = DonationRequest.query.get_or_404(request_id)
+        action = request.form.get('action')
+        
+        # Verify authorization
+        if session['role'] == 'donor' and request.donation.user_id != session['user_id']:
+            flash('Unauthorized action', 'danger')
+            return redirect(url_for('manage_donations'))
+            
+        if action == 'approve':
+            request.status = 'approved'
+            request.donation.status = 'reserved'
+            
+            # Notify organization
+            flash('Request approved successfully!', 'success')
+            
+        elif action == 'deny':
+            request.status = 'denied'
+            request.donation.status = 'available'
+            flash('Request denied successfully!', 'success')
+            
+        elif action == 'complete':
+            request.status = 'completed'
+            request.donation.status = 'collected'
+            flash('Donation marked as collected!', 'success')
+            
+        db.session.commit()
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error handling request: {str(e)}")
+        flash('Error processing request', 'danger')
+        
+    return redirect(url_for('manage_donations'))
 
 if __name__ == '__main__':
     try:
