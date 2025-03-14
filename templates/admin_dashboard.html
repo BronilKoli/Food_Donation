@@ -3,192 +3,58 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-user-shield mr-2"></i>Admin Dashboard
-        </h1>
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <h2>Admin Control Panel</h2>
     </div>
 
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-                    <i class="fas fa-box text-blue-500 dark:text-blue-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Total Donations</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.total_donations }}</h3>
-                </div>
-            </div>
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3>Users</h3>
+            <p>Total: {{ stats.total_users }}</p>
+            <a href="{{ url_for('manage_users') }}" class="btn-primary">Manage Users</a>
         </div>
-        
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
-                    <i class="fas fa-clock text-yellow-500 dark:text-yellow-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Pending Requests</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.pending_requests }}</h3>
-                </div>
-            </div>
+        <div class="admin-card">
+            <h3>Donations</h3>
+            <p>Active: {{ stats.active_donations }}</p>
+            <a href="{{ url_for('manage_donations') }}" class="btn-primary">Manage Donations</a>
         </div>
-        
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                    <i class="fas fa-users text-green-500 dark:text-green-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Total Volunteers</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.total_volunteers }}</h3>
-                </div>
-            </div>
+        <div class="admin-card">
+            <h3>Organizations</h3>
+            <p>Registered: {{ stats.total_organizations }}</p>
+            <a href="{{ url_for('manage_organizations') }}" class="btn-primary">Manage Organizations</a>
         </div>
-        
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
-                    <i class="fas fa-user-friends text-purple-500 dark:text-purple-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Total Users</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.total_users }}</h3>
-                </div>
-            </div>
+        <div class="admin-card">
+            <h3>Volunteers</h3>
+            <p>Active: {{ stats.active_volunteers }}</p>
+            <a href="{{ url_for('manage_volunteers') }}" class="btn-primary">Manage Volunteers</a>
         </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Pending Requests -->
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-            <div class="p-6 border-b dark:border-gray-700">
-                <h2 class="text-xl font-semibold dark:text-white">
-                    <i class="fas fa-clock mr-2"></i>Pending Requests
-                </h2>
-            </div>
-            <div class="p-6">
-                {% if pending_requests %}
-                <div class="space-y-4">
-                    {% for request in pending_requests %}
-                    <div class="border dark:border-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-semibold dark:text-white">{{ request.donation.item_name }}</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">
-                                    Requested by: {{ request.requester.name }}
-                                </p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">
-                                    Category: {{ request.donation.category }}
-                                </p>
-                            </div>
-                            <div class="space-x-2">
-                                <a href="{{ url_for('update_request', request_id=request.id, status='approved') }}" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700">
-                                    Approve
-                                </a>
-                                <a href="{{ url_for('update_request', request_id=request.id, status='denied') }}" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
-                                    Deny
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p class="text-gray-600 dark:text-gray-400 text-center py-4">No pending requests</p>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Manage Volunteers -->
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-            <div class="p-6 border-b dark:border-gray-700 flex justify-between items-center">
-                <h2 class="text-xl font-semibold dark:text-white">
-                    <i class="fas fa-users mr-2"></i>Volunteers
-                </h2>
-                <a href="{{ url_for('manage_volunteers') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
-                    <i class="fas fa-plus mr-2"></i>Manage Volunteers
-                </a>
-            </div>
-            <div class="p-6">
-                {% if volunteers %}
-                <div class="space-y-4">
-                    {% for volunteer in volunteers %}
-                    <div class="border dark:border-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-semibold dark:text-white">{{ volunteer.name }}</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ volunteer.contact }}</p>
-                            </div>
-                            <div>
-                                <a href="{{ url_for('manage_volunteers') }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
-                                    Assign
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p class="text-gray-600 dark:text-gray-400 text-center py-4">No volunteers registered</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    
-    <!-- Users Management Section -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-        <div class="p-6 border-b dark:border-gray-700 flex justify-between items-center">
-            <h2 class="text-xl font-semibold dark:text-white">
-                <i class="fas fa-users-cog mr-2"></i>User Management
-            </h2>
-            <a href="{{ url_for('manage_users') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
-                View All Users
-            </a>
-        </div>
-        <div class="p-6">
-            {% if users %}
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white dark:bg-gray-800 border dark:border-gray-700">
-                    <thead>
-                        <tr>
-                            <th class="py-2 px-4 border-b dark:border-gray-700 text-left text-gray-700 dark:text-gray-300">Name</th>
-                            <th class="py-2 px-4 border-b dark:border-gray-700 text-left text-gray-700 dark:text-gray-300">Email</th>
-                            <th class="py-2 px-4 border-b dark:border-gray-700 text-left text-gray-700 dark:text-gray-300">Role</th>
-                            <th class="py-2 px-4 border-b dark:border-gray-700 text-left text-gray-700 dark:text-gray-300">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users[:5] %}
-                        <tr>
-                            <td class="py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-gray-200">{{ user.name }}</td>
-                            <td class="py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-gray-200">{{ user.email }}</td>
-                            <td class="py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-gray-200">{{ user.role|title }}</td>
-                            <td class="py-2 px-4 border-b dark:border-gray-700">
-                                {% if user.role != "admin" %}
-                                <a href="{{ url_for('delete_user', user_id=user.id) }}" 
-                                   onclick="return confirm('Are you sure you want to delete this user?')"
-                                   class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-gray-600 dark:text-gray-400 text-center py-4">No users found</p>
-            {% endif %}
-        </div>
+    <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_activities %}
+                <tr>
+                    <td>{{ activity.action }}</td>
+                    <td>{{ activity.user }}</td>
+                    <td>{{ activity.date }}</td>
+                    <td>
+                        <a href="{{ url_for('activity_details', id=activity.id) }}">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
-<button type="submit" class="btn btn-primary w-full">
-    <i class="fas fa-hand-holding-heart mr-2"></i>
-    <span>Request Item</span>
-</button>
 {% endblock %}

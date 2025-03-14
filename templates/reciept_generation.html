@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Receipt Generation{% endblock %}
+
+{% block content %}
+<div class="receipt-container">
+    <div class="receipt-header">
+        <h2>Generate Donation Receipt</h2>
+        <div class="receipt-actions">
+            <button class="btn-primary" onclick="generateReceipt()">Generate New Receipt</button>
+            <button class="btn-secondary" onclick="downloadAll()">Download All</button>
+        </div>
+    </div>
+
+    <div class="receipt-filters">
+        <input type="date" class="form-control" id="date-filter">
+        <select class="form-select" id="donor-filter">
+            <option value="">Select Donor</option>
+            {% for donor in donors %}
+                <option value="{{ donor.id }}">{{ donor.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="receipts-list">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Receipt ID</th>
+                    <th>Donor</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for receipt in receipts %}
+                <tr>
+                    <td>{{ receipt.id }}</td>
+                    <td>{{ receipt.donor_name }}</td>
+                    <td>{{ receipt.date }}</td>
+                    <td>{{ receipt.amount }}</td>
+                    <td>
+                        <button onclick="viewReceipt('{{ receipt.id }}')" class="btn-info">View</button>
+                        <button onclick="downloadReceipt('{{ receipt.id }}')" class="btn-secondary">Download</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

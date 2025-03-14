@@ -1,165 +1,56 @@
 {% extends "base.html" %}
 
-{% block title %}Donor Dashboard{% endblock %}
+{% block title %}Donor Dashboard - Food Donation System{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-tachometer-alt mr-2"></i>Donor Dashboard
-        </h1>
-        <a href="{{ url_for('donate_item') }}" 
-           class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 
-                  text-white px-6 py-2 rounded-lg transition-colors duration-200 
-                  flex items-center space-x-2">
-            <i class="fas fa-plus"></i>
-            <span>New Donation</span>
-        </a>
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h2>Welcome, {{ user.name }}</h2>
+        <a href="{{ url_for('donate_food') }}" class="btn-primary">New Donation</a>
     </div>
 
-    <!-- Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-                    <i class="fas fa-box text-blue-500 dark:text-blue-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Total Donations</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.total_donations }}</h3>
-                </div>
-            </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Donations</h3>
+            <p>{{ stats.total_donations }}</p>
         </div>
-        
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-green-100 dark:bg-green-900 rounded-full">
-                    <i class="fas fa-check-circle text-green-500 dark:text-green-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">Active Donations</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.active_donations }}</h3>
-                </div>
-            </div>
+        <div class="stat-card">
+            <h3>Active Donations</h3>
+            <p>{{ stats.active_donations }}</p>
         </div>
-        
-        <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 bg-purple-100 dark:bg-purple-900 rounded-full">
-                    <i class="fas fa-users text-purple-500 dark:text-purple-400 text-xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-400">People Helped</p>
-                    <h3 class="text-2xl font-bold dark:text-white">{{ stats.people_helped }}</h3>
-                </div>
-            </div>
+        <div class="stat-card">
+            <h3>People Helped</h3>
+            <p>{{ stats.people_helped }}</p>
         </div>
     </div>
 
-    <!-- Recent Donations -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-        <div class="p-6 border-b dark:border-gray-700">
-            <h2 class="text-xl font-semibold dark:text-white">
-                <i class="fas fa-history mr-2"></i>Recent Donations
-            </h2>
-        </div>
-        <div class="p-6">
-            {% if recent_donations %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for donation in recent_donations %}
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-4 transition-colors duration-200">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ donation.item_name }}</h3>
-                            <span class="inline-block px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mt-1">
-                                {{ donation.category|title }}
-                            </span>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-sm 
-                               {% if donation.status == 'available' %}
-                               bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200
-                               {% else %}
-                               bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200
-                               {% endif %}">
-                            {{ donation.status|title }}
-                        </span>
-                    </div>
-                    
-                    <div class="space-y-2 text-gray-600 dark:text-gray-400">
-                        <p class="flex items-center">
-                            <i class="fas fa-tag w-5"></i>
-                            {{ donation.donation_type }}
-                        </p>
-                        <p class="flex items-center">
-                            <i class="fas fa-box w-5"></i>
-                            {{ donation.quantity }}
-                        </p>
-                        <p class="flex items-center">
-                            <i class="fas fa-map-marker-alt w-5"></i>
-                            {{ donation.location }}
-                        </p>
-                        {% if donation.expiry_date %}
-                        <p class="flex items-center">
-                            <i class="fas fa-calendar-alt w-5"></i>
-                            Expires: {{ donation.expiry_date.strftime('%Y-%m-%d') }}
-                        </p>
-                        {% endif %}
-                    </div>
-
-                    {% if donation.requests %}
-                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Pending Requests</h4>
-                        {% for request in donation.requests %}
-                        {% if request.status == 'pending' %}
-                        <div class="bg-white dark:bg-gray-700 rounded p-3 mb-2 shadow-sm">
-                            <div class="flex justify-between items-center">
-                                <p class="text-sm text-gray-800 dark:text-gray-200">From: {{ request.requester.name }}</p>
-                                <div class="flex space-x-2">
-                                    <a href="{{ url_for('update_request', request_id=request.id, status='approved') }}"
-                                       class="text-sm bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 
-                                              text-white px-3 py-1 rounded transition-colors duration-200">
-                                        <i class="fas fa-check mr-1"></i>Approve
-                                    </a>
-                                    <a href="{{ url_for('update_request', request_id=request.id, status='denied') }}"
-                                       class="text-sm bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-700 
-                                              text-white px-3 py-1 rounded transition-colors duration-200">
-                                        <i class="fas fa-times mr-1"></i>Deny
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <a href="{{ url_for('edit_donation', id=donation.id) }}"
-                           class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mr-4">
-                            <i class="fas fa-edit mr-1"></i>Edit
-                        </a>
-                        <a href="{{ url_for('delete_donation', id=donation.id) }}"
-                           class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                           onclick="return confirm('Are you sure?')">
-                            <i class="fas fa-trash-alt mr-1"></i>Delete
-                        </a>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-full">
-                        <i class="fas fa-hand-holding-heart mr-2"></i>
-                        <span>Request Item</span>
-                    </button>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="text-center py-12">
-                <div class="inline-block p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                    <i class="fas fa-box-open text-4xl text-gray-400 dark:text-gray-500"></i>
-                </div>
-                <h3 class="text-xl font-medium text-gray-600 dark:text-gray-300">No donations yet</h3>
-                <p class="text-gray-500 dark:text-gray-400 mt-2">Start by creating your first donation</p>
-            </div>
-            {% endif %}
+    <div class="recent-donations">
+        <h3>Recent Donations</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donation in recent_donations %}
+                    <tr>
+                        <td>{{ donation.item_name }}</td>
+                        <td>{{ donation.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ donation.status }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_donation', id=donation.id) }}">Edit</a>
+                            <a href="{{ url_for('delete_donation', id=donation.id) }}" 
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

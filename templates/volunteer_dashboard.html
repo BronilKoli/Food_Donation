@@ -3,111 +3,53 @@
 {% block title %}Volunteer Dashboard{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
-            <i class="fas fa-hands-helping mr-2"></i>Volunteer Dashboard
-        </h1>
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h2>Welcome {{ volunteer.name }}</h2>
     </div>
 
-    <!-- Volunteer Profile -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow p-6 transition-colors duration-200">
-        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">My Profile</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <p class="text-gray-600 dark:text-gray-400">Name</p>
-                <p class="font-semibold text-gray-800 dark:text-white">{{ volunteer.name }}</p>
-            </div>
-            <div>
-                <p class="text-gray-600 dark:text-gray-400">Contact</p>
-                <p class="font-semibold text-gray-800 dark:text-white">{{ volunteer.contact }}</p>
-            </div>
-            <div>
-                <p class="text-gray-600 dark:text-gray-400">Address</p>
-                <p class="font-semibold text-gray-800 dark:text-white">{{ volunteer.address }}</p>
-            </div>
-            <div>
-                <p class="text-gray-600 dark:text-gray-400">Assigned Organization</p>
-                <p class="font-semibold text-gray-800 dark:text-white">
-                    {{ volunteer.assigned_agent.name if volunteer.assigned_agent else 'Not assigned' }}
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Assigned Requests -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-        <div class="p-6 border-b dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-                <i class="fas fa-tasks mr-2"></i>Assigned Requests
-            </h2>
-        </div>
-        <div class="p-6">
-            {% if assigned_requests %}
-            <div class="space-y-4">
-                {% for request in assigned_requests %}
-                <div class="border dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-semibold text-gray-800 dark:text-white">
-                                {{ request.donation.item_name }}
-                            </h3>
-                            <span class="inline-block px-2 py-1 text-xs rounded bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 mt-1">
-                                {{ request.donation.category|title }}
-                            </span>
-                            <div class="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                                <p><i class="fas fa-map-marker-alt w-5"></i>{{ request.donation.location }}</p>
-                                <p><i class="fas fa-box w-5"></i>{{ request.donation.quantity }}</p>
-                                <p><i class="fas fa-user w-5"></i>Requester: {{ request.requester.name }}</p>
-                            </div>
-                        </div>
-                        <div>
-                            {% if request.status == 'approved' %}
-                            <a href="{{ url_for('update_request', request_id=request.id, status='collected') }}"
-                               class="px-4 py-2 bg-green-500 dark:bg-green-600 text-white rounded 
-                                      hover:bg-green-600 dark:hover:bg-green-700 transition-colors duration-200">
-                                <i class="fas fa-check mr-1"></i>Mark as Collected
-                            </a>
-                            {% elif request.status == 'collected' %}
-                            <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 
-                                       rounded-full">
-                                <i class="fas fa-check-circle mr-1"></i>Completed
-                            </span>
-                            {% endif %}
-                        </div>
-                    </div>
+    <div class="tasks-section">
+        <h3>Current Tasks</h3>
+        <div class="task-cards">
+            {% for task in current_tasks %}
+            <div class="task-card">
+                <h4>{{ task.title }}</h4>
+                <p>From: {{ task.pickup_location }}</p>
+                <p>To: {{ task.delivery_location }}</p>
+                <p>Status: {{ task.status }}</p>
+                <div class="task-actions">
+                    <button class="btn-secondary" onclick="updateStatus('{{ task.id }}')">
+                        Update Status
+                    </button>
+                    <a href="{{ url_for('task_details', id=task.id) }}" class="btn-primary">
+                        View Details
+                    </a>
                 </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="completed-tasks">
+        <h3>Completed Tasks</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in completed_tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.completed_date }}</td>
+                    <td>Completed</td>
+                </tr>
                 {% endfor %}
-            </div>
-            {% else %}
-            <div class="text-center py-8">
-                <div class="inline-block p-4 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                    <i class="fas fa-tasks text-4xl text-gray-400 dark:text-gray-500"></i>
-                </div>
-                <p class="text-gray-600 dark:text-gray-400">No assigned requests</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    
-    <!-- Available Donations Section -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow transition-colors duration-200">
-        <div class="p-6 border-b dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-                <i class="fas fa-box-open mr-2"></i>Browse Available Donations
-            </h2>
-        </div>
-        <div class="p-6">
-            <a href="{{ url_for('browse_donations') }}" class="block w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 
-                  text-white px-4 py-3 rounded-lg transition duration-200 
-                  text-center">
-                View Available Donations
-            </a>
-            <button type="submit" class="btn btn-primary w-full">
-                <i class="fas fa-hand-holding-heart mr-2"></i>
-                <span>Request Item</span>
-            </button>
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

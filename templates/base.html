@@ -1,439 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" data-theme="{{ theme_preference }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodShare - {% block title %}Welcome{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script>
-        // Add Tailwind dark mode config
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            'bg': '#1a1a1a',
-                            'card': '#2d2d2d',
-                            'text': '#e5e5e5'
-                        }
-                    }
-                }
-            }
-        }
-
-        // Theme toggle functionality
-        function initTheme() {
-            // Check for theme preference in session/localStorage
-            let themePreference = "{{ session.get('theme', 'system') }}";
-            
-            if (themePreference === 'dark') {
-                document.documentElement.classList.add('dark')
-                localStorage.theme = 'dark'
-            } else if (themePreference === 'light') {
-                document.documentElement.classList.remove('dark')
-                localStorage.theme = 'light'
-            } else {
-                // Use system preference
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark')
-                } else {
-                    document.documentElement.classList.remove('dark')
-                }
-            }
-        }
-
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark')
-                localStorage.theme = 'light'
-            } else {
-                document.documentElement.classList.add('dark')
-                localStorage.theme = 'dark'
-            }
-        }
-
-        // Initialize theme on page load
-        initTheme()
-    </script>
-    <style>
-        /* Add these utility classes after existing styles */
-        .card {
-            @apply bg-white dark:bg-dark-card rounded-lg shadow-md 
-                   transition-colors duration-200;
-        }
-        
-        .card-header {
-            @apply p-6 border-b dark:border-gray-700 flex justify-between items-center;
-        }
-        
-        .card-body {
-            @apply p-6;
-        }
-        
-        .stat-card {
-            @apply bg-white dark:bg-dark-card rounded-lg shadow p-6 
-                   transition-colors duration-200;
-        }
-        
-        .stat-icon {
-            @apply p-3 rounded-full;
-        }
-        
-        .btn {
-            @apply px-4 py-2 rounded-lg transition-colors duration-200 
-                   inline-flex items-center justify-center space-x-2;
-        }
-        
-        .btn-primary {
-            @apply bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 
-                   dark:hover:bg-blue-700 text-white;
-        }
-        
-        .btn-success {
-            @apply bg-green-500 hover:bg-green-600 dark:bg-green-600 
-                   dark:hover:bg-green-700 text-white;
-        }
-        
-        .btn-danger {
-            @apply bg-red-500 hover:bg-red-600 dark:bg-red-600 
-                   dark:hover:bg-red-700 text-white;
-        }
-
-        /* Add these button variants after existing .btn classes */
-        .btn-secondary {
-            @apply bg-gray-200 hover:bg-gray-300 
-                   dark:bg-gray-700 dark:hover:bg-gray-600
-                   text-gray-800 dark:text-gray-200;
-        }
-
-        .btn-outline {
-            @apply border-2 border-current
-                   bg-transparent hover:bg-gray-100 
-                   dark:hover:bg-gray-800;
-        }
-
-        .btn-sm {
-            @apply px-3 py-1 text-sm;
-        }
-
-        .btn-lg {
-            @apply px-6 py-3 text-lg;
-        }
-
-        .btn-icon {
-            @apply p-2 rounded-full;
-        }
-
-        .btn-disabled {
-            @apply opacity-50 cursor-not-allowed pointer-events-none;
-        }
-        
-        .nav-link {
-            @apply text-gray-600 dark:text-gray-300 
-                   hover:text-gray-900 dark:hover:text-white 
-                   transition-colors duration-200;
-        }
-        
-        .nav-link.active {
-            @apply text-blue-500 dark:text-blue-400 font-medium;
-        }
-        
-        .badge {
-            @apply px-2 py-1 text-xs rounded-full;
-        }
-        
-        .badge-success {
-            @apply bg-green-100 dark:bg-green-900 
-                   text-green-800 dark:text-green-200;
-        }
-        
-        .badge-warning {
-            @apply bg-yellow-100 dark:bg-yellow-900 
-                   text-yellow-800 dark:text-yellow-200;
-        }
-        
-        .badge-danger {
-            @apply bg-red-100 dark:bg-red-900 
-                   text-red-800 dark:text-red-200;
-        }
-
-        /* Add these badge classes after existing styles */
-        .badge-donor {
-            @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
-        }
-        
-        .badge-organization {
-            @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
-        }
-        
-        .badge-volunteer {
-            @apply bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200;
-        }
-        
-        .badge-admin {
-            @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
-        }
-
-        /* Replace the existing form utility classes with these improved versions */
-        .form-group {
-            @apply space-y-2 mb-4;
-        }
-
-        .form-input {
-            @apply block w-full px-4 py-2
-                   border border-gray-300 dark:border-gray-600 
-                   rounded-lg shadow-sm
-                   bg-white dark:bg-gray-800 
-                   text-gray-900 dark:text-white
-                   placeholder-gray-500 dark:placeholder-gray-400
-                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                   dark:focus:ring-blue-400 dark:focus:border-blue-400
-                   disabled:bg-gray-100 disabled:dark:bg-gray-700
-                   disabled:cursor-not-allowed
-                   transition-colors duration-200;
-        }
-
-        .form-select {
-            @apply form-input appearance-none bg-no-repeat pr-10;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.5rem center;
-            background-size: 1.5em 1.5em;
-        }
-
-        .form-textarea {
-            @apply form-input min-h-[100px] resize-y;
-        }
-
-        .form-label {
-            @apply block text-sm font-medium 
-                   text-gray-700 dark:text-gray-300 
-                   mb-1;
-        }
-
-        .form-error {
-            @apply text-sm text-red-600 dark:text-red-400 
-                   mt-1 min-h-[1.25rem];
-        }
-
-        .form-help {
-            @apply text-sm text-gray-500 dark:text-gray-400 
-                   mt-1;
-        }
-
-        .form-checkbox {
-            @apply h-4 w-4 rounded
-                   border-gray-300 dark:border-gray-600
-                   text-blue-600 dark:text-blue-400
-                   focus:ring-blue-500 dark:focus:ring-blue-400
-                   bg-white dark:bg-gray-800;
-        }
-
-        .form-radio {
-            @apply form-checkbox rounded-full;
-        }
-
-        /* Add form layout utilities */
-        .form-row {
-            @apply flex flex-col md:flex-row gap-4;
-        }
-
-        .form-col {
-            @apply flex-1;
-        }
-
-        .form-actions {
-            @apply flex flex-col sm:flex-row gap-3 mt-6 
-                   border-t dark:border-gray-700 pt-6;
-        }
-
-        /* Add this in the <style> section */
-        .form-container {
-            @apply max-w-md mx-auto bg-white dark:bg-dark-card 
-                   rounded-lg shadow-lg p-8;
-        }
-
-        .form-header {
-            @apply text-center mb-8;
-        }
-
-        .form-title {
-            @apply text-2xl font-bold text-gray-800 dark:text-white;
-        }
-
-        .form-subtitle {
-            @apply text-sm text-gray-600 dark:text-gray-400 mt-2;
-        }
-
-        .form-group {
-            @apply space-y-4 mb-6;
-        }
-
-        .form-label {
-            @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
-        }
-
-        .form-input {
-            @apply mt-1 block w-full px-3 py-2
-                   border border-gray-300 dark:border-gray-600 
-                   rounded-md shadow-sm
-                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                   bg-white dark:bg-gray-800 
-                   text-gray-900 dark:text-white;
-        }
-
-        .form-error {
-            @apply text-sm text-red-600 dark:text-red-400 mt-1;
-        }
-
-        .form-help {
-            @apply text-xs text-gray-500 dark:text-gray-400 mt-1;
-        }
-
-        .form-actions {
-            @apply flex space-x-4 mt-6;
-        }
-
-        .form-button {
-            @apply w-full flex justify-center py-2 px-4
-                   border border-transparent rounded-md shadow-sm
-                   text-sm font-medium text-white
-                   bg-blue-600 hover:bg-blue-700 
-                   dark:bg-blue-700 dark:hover:bg-blue-800
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
-        }
-    </style>
+    <title>{% block title %}Food Donation System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="min-h-screen bg-gray-50 dark:bg-dark-bg dark:text-dark-text transition-colors duration-200">
-    <!-- Navigation -->
-    <nav class="bg-white dark:bg-dark-card shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <a href="{{ url_for('dashboard') if 'user_id' in session else url_for('login') }}" 
-                   class="flex items-center space-x-2">
-                    <i class="fas fa-hand-holding-heart text-2xl text-rose-500"></i>
-                    <span class="text-xl font-bold text-gray-800 dark:text-white">DonateShare</span>
-                </a>
-                
-                {% if 'user_id' in session %}
-                <!-- Role-specific navigation -->
-                <div class="hidden md:flex space-x-6">
-                    {% if session['role'] == 'donor' %}
-                    <a href="{{ url_for('donate_food') }}" 
-                       class="nav-link {% if request.endpoint == 'donate_food' %}active{% endif %}">
-                        <i class="fas fa-plus mr-1"></i>Make Donation
-                    </a>
-                    <a href="{{ url_for('manage_donations') }}" 
-                       class="nav-link {% if request.endpoint == 'manage_donations' %}active{% endif %}">
-                        <i class="fas fa-box mr-1"></i>My Donations
-                    </a>
-                    {% elif session['role'] == 'organization' %}
-                    <a href="{{ url_for('browse_donations') }}" 
-                       class="nav-link {% if request.endpoint == 'browse_donations' %}active{% endif %}">
-                        <i class="fas fa-search mr-1"></i>Browse Donations
-                    </a>
-                    <a href="{{ url_for('my_requests') }}" 
-                       class="nav-link {% if request.endpoint == 'my_requests' %}active{% endif %}">
-                        <i class="fas fa-clipboard-list mr-1"></i>My Requests
-                    </a>
-                    <a href="{{ url_for('manage_volunteers') }}" 
-                       class="nav-link {% if request.endpoint == 'manage_volunteers' %}active{% endif %}">
-                        <i class="fas fa-users mr-1"></i>Volunteers
-                    </a>
-                    {% elif session['role'] == 'volunteer' %}
-                    <a href="{{ url_for('browse_donations') }}" 
-                       class="nav-link {% if request.endpoint == 'browse_donations' %}active{% endif %}">
-                        <i class="fas fa-box-open mr-1"></i>Available Donations
-                    </a>
-                    <a href="{{ url_for('assigned_requests') }}" 
-                       class="nav-link {% if request.endpoint == 'assigned_requests' %}active{% endif %}">
-                        <i class="fas fa-tasks mr-1"></i>My Tasks
-                    </a>
-                    {% elif session['role'] == 'admin' %}
-                    <a href="{{ url_for('admin_dashboard') }}" 
-                       class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
-                        <i class="fas fa-chart-bar mr-1"></i>Overview
-                    </a>
-                    <a href="{{ url_for('manage_users') }}" 
-                       class="nav-link {% if request.endpoint == 'manage_users' %}active{% endif %}">
-                        <i class="fas fa-users-cog mr-1"></i>Users
-                    </a>
-                    <a href="{{ url_for('manage_donations') }}" 
-                       class="nav-link {% if request.endpoint == 'manage_donations' %}active{% endif %}">
-                        <i class="fas fa-box mr-1"></i>Donations
-                    </a>
-                    <a href="{{ url_for('manage_volunteers') }}" 
-                       class="nav-link {% if request.endpoint == 'manage_volunteers' %}active{% endif %}">
-                        <i class="fas fa-hands-helping mr-1"></i>Volunteers
-                    </a>
-                    {% endif %}
-                </div>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('index') }}">Food Donation</a>
+        </div>
+        <div class="navbar-menu">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                {% if 'donor' in permissions %}
+                    <a href="{{ url_for('donate_food') }}">Donate</a>
                 {% endif %}
-
-                <!-- User Menu -->
-                <div class="flex items-center space-x-6">
-                    <!-- Theme Toggle -->
-                    <button onclick="toggleTheme()" 
-                            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 
-                                   transition-colors duration-200">
-                        <i class="fas fa-moon dark:hidden"></i>
-                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
-                    </button>
-
-                    {% if 'user_id' not in session %}
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-                        <a href="{{ url_for('signup') }}" class="btn btn-primary">Sign Up</a>
+                <div class="dropdown">
+                    <button class="dropbtn">{{ current_user.name }}</button>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('profile') }}">Profile</a>
+                        <a href="{{ url_for('settings') }}">Settings</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
                     </div>
-                    {% else %}
-                    <div class="flex items-center space-x-4">
-                        <div class="flex items-center space-x-2">
-                            <span class="badge badge-{{ session['role'] }}">
-                                {{ session['role']|title }}
-                            </span>
-                            <span class="text-gray-600 dark:text-gray-300">
-                                {{ session['user_name'] }}
-                            </span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <a href="{{ url_for('settings') }}" 
-                               class="nav-link {% if request.endpoint == 'settings' %}active{% endif %}">
-                                <i class="fas fa-cog"></i>
-                            </a>
-                            <a href="{{ url_for('logout') }}" 
-                               class="nav-link text-red-500 hover:text-red-600">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
-            </div>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn-primary">Sign Up</a>
+            {% endif %}
         </div>
     </nav>
 
     <!-- Flash Messages -->
-    <div class="max-w-7xl mx-auto px-4 py-4">
+    <div class="flash-messages">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                <div class="p-4 rounded-lg mb-4 
-                            {% if category == 'success' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
-                            {% elif category == 'danger' %}bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200
-                            {% elif category == 'warning' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200
-                            {% else %}bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200{% endif %}">
-                    {{ message }}
-                </div>
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
     </div>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
+    <main class="container">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Food Donation System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

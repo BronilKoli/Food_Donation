@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Create Donation{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Create New Donation</h2>
+    <form method="POST" enctype="multipart/form-data" class="donation-form">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.food_name.label }}
+            {{ form.food_name(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.quantity.label }}
+            {{ form.quantity(class="form-control") }}
+            {{ form.unit(class="form-select") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.expiry_date.label }}
+            {{ form.expiry_date(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.pickup_address.label }}
+            {{ form.pickup_address(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label }}
+            {{ form.description(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.image.label }}
+            {{ form.image(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn-primary">Create Donation</button>
+    </form>
+</div>
+{% endblock %}

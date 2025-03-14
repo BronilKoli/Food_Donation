@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Profile Settings{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>Profile Settings</h2>
+    </div>
+
+    <div class="profile-content">
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="profile-section">
+                <h3>Personal Information</h3>
+                <div class="form-group">
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.phone.label }}
+                    {{ form.phone(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.address.label }}
+                    {{ form.address(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3>Password Update</h3>
+                <div class="form-group">
+                    {{ form.current_password.label }}
+                    {{ form.current_password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.new_password.label }}
+                    {{ form.new_password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Save Changes</button>
+                <button type="button" class="btn-secondary" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

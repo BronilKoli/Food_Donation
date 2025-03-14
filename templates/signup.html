@@ -1,184 +1,57 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up - FoodShare{% endblock %}
+{% block title %}Sign Up - Food Donation System{% endblock %}
 
 {% block content %}
-<div class="min-h-full flex flex-col justify-center">
-    <div class="max-w-md w-full mx-auto">
-        <div class="bg-white dark:bg-dark-card py-8 px-4 shadow-lg rounded-lg sm:px-10 transition-colors duration-200">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Create Account</h2>
-                <p class="text-gray-600 dark:text-gray-400 mt-2">Join our food sharing community</p>
-            </div>
-
-            <form method="POST" action="{{ url_for('signup') }}" class="space-y-6">
-                <!-- Add hidden CSRF token field -->
-                {{ form.csrf_token }}
-
-                <!-- Email Field -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-envelope mr-2"></i>Email
-                    </label>
-                    {{ form.email(class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white", 
-                                  id="email", placeholder="Enter your email") }}
-                    {% if form.email.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {% for error in form.email.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Password Field -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-lock mr-2"></i>Password
-                    </label>
-                    {{ form.password(class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white", 
-                                  id="password") }}
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Must be at least 6 characters long</p>
-                    {% if form.password.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {% for error in form.password.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div>
-                    <label for="confirm_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-lock mr-2"></i>Confirm Password
-                    </label>
-                    {{ form.confirm_password(class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white",
-                                  id="confirm_password") }}
-                    {% if form.confirm_password.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {% for error in form.confirm_password.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Name Field -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-user mr-2"></i>Full Name
-                    </label>
-                    {{ form.name(class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white",
-                                  id="name", placeholder="Enter your full name") }}
-                    {% if form.name.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {% for error in form.name.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Role Selection -->
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-user-tag mr-2"></i>I want to
-                    </label>
-                    {{ form.role(class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                   rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                   bg-white dark:bg-gray-800 text-gray-900 dark:text-white",
-                                   id="role", onchange="toggleVolunteerFields(this.value)") }}
-                    {% if form.role.errors %}
-                        <div class="text-red-500 text-sm mt-1">
-                            {% for error in form.role.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Volunteer-specific fields -->
-                <div id="volunteer-fields" style="display: none;" class="space-y-4">
-                    <div>
-                        <label for="contact" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            <i class="fas fa-phone mr-2"></i>Contact Number
-                        </label>
-                        <input type="text" 
-                               id="contact" 
-                               name="contact"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                      rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                    </div>
-
-                    <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            <i class="fas fa-map-marker-alt mr-2"></i>Address
-                        </label>
-                        <textarea id="address" 
-                                  name="address" 
-                                  rows="3"
-                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                         rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white"></textarea>
-                    </div>
-                </div>
-
-                <button type="submit" 
-                        class="w-full flex justify-center items-center py-2 px-4 border border-transparent 
-                               rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 
-                               hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 
-                               focus:outline-none focus:ring-2 focus:ring-offset-2 
-                               focus:ring-blue-500 transition-colors duration-200">
-                    <i class="fas fa-user-plus mr-2"></i>Create Account
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Already have an account? 
-                    <a href="{{ url_for('login') }}" 
-                       class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
-                        Sign in
-                    </a>
-                </p>
-            </div>
+<div class="auth-container">
+    <h2>Create an Account</h2>
+    <form method="POST" class="auth-form">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% if form.name.errors %}
+                <div class="errors">{{ form.name.errors[0] }}</div>
+            {% endif %}
         </div>
+
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+            {% if form.email.errors %}
+                <div class="errors">{{ form.email.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.role.label }}
+            {{ form.role(class="form-control") }}
+            {% if form.role.errors %}
+                <div class="errors">{{ form.role.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control") }}
+            {% if form.password.errors %}
+                <div class="errors">{{ form.password.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(class="form-control") }}
+            {% if form.confirm_password.errors %}
+                <div class="errors">{{ form.confirm_password.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn-primary">Sign Up</button>
+    </form>
+    <div class="auth-links">
+        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
     </div>
 </div>
-
-<script>
-function toggleVolunteerFields(role) {
-    const volunteerFields = document.getElementById('volunteer-fields');
-    const contactInput = document.getElementById('contact');
-    const addressInput = document.getElementById('address');
-    
-    if (role === 'volunteer') {
-        volunteerFields.style.display = 'block';
-        contactInput.required = true;
-        addressInput.required = true;
-    } else {
-        volunteerFields.style.display = 'none';
-        contactInput.required = false;
-        addressInput.required = false;
-    }
-}
-
-// Initialize the form based on any existing role selection
-document.addEventListener('DOMContentLoaded', function() {
-    const roleSelect = document.getElementById('role');
-    if (roleSelect.value) {
-        toggleVolunteerFields(roleSelect.value);
-    }
-});
-</script>
 {% endblock %}

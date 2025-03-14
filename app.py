@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy import desc
-from sqlalchemy.exc import IntegrityError
 import logging
-from models import db, User, Donation, DonationRequest, Volunteer
-from forms import LoginForm, SignupForm, DonationForm, VolunteerForm, UserPreferencesForm
+from models import db, User, FoodDonation, FoodRequest, Volunteer, DonationReceipt
+from forms import (LoginForm, SignupForm, DonationForm, UserPreferencesForm, 
+                  DonationRequestForm, VolunteerForm)
 from config import Config
 import os
 
@@ -100,6 +98,24 @@ def role_required(roles):
         return decorated_function
     return decorator
 
+def get_user_permissions(role):
+    """Define permissions for each role"""
+    permissions = {
+        'admin': ['manage_users', 'manage_donations', 'manage_volunteers', 
+                 'generate_receipts', 'approve_requests'],
+        'donor': ['create_donation', 'view_donations', 'update_donation'],
+        'organization': ['request_donation', 'manage_volunteers', 'view_donations'],
+        'volunteer': ['update_status', 'view_assignments', 'view_donations']
+    }
+    return permissions.get(role, [])
+
+@app.context_processor
+def inject_permissions():
+    """Inject permissions into all templates"""
+    if 'role' in session:
+        return {'permissions': get_user_permissions(session['role'])}
+    return {'permissions': []}
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     try:
@@ -187,62 +203,76 @@ def login():
         flash('An error occurred. Please try again.', 'danger')
         return render_template('login.html', form=form)
 
-# Update dashboard route to handle all roles
+# Update dashboard route to use correct template names
 @app.route('/')
 @login_required
 def dashboard():
     try:
         role = session['role']
+        user = User.query.get(session['user_id'])
+        
+        context = {
+            'user': user,
+            'role': role
+        }
         
         if role == 'donor':
-            donations = Donation.query.filter_by(user_id=session['user_id'])
-            stats = {
-                'total_donations': donations.count(),
-                'active_donations': donations.filter_by(status='available').count(),
-                'people_helped': DonationRequest.query.join(Donation).filter(
-                    Donation.user_id == session['user_id'],
-                    DonationRequest.status == 'collected'
-                ).count()
-            }
-            recent_donations = donations.order_by(desc(Donation.created_at)).limit(6).all()
+            donations = FoodDonation.query.filter_by(user_id=session['user_id'])
+            context.update({
+                'stats': {
+                    'total_donations': donations.count(),
+                    'active_donations': donations.filter_by(status='available').count(),
+                    'people_helped': FoodRequest.query.join(FoodDonation).filter(
+                        FoodDonation.user_id == session['user_id'],
+                        FoodRequest.status == 'collected'
+                    ).count()
+                },
+                'recent_donations': donations.order_by(desc(FoodDonation.created_at)).limit(6).all()
+            })
+            return render_template('donor_dashboard.html', **context)
             
-            return render_template('donor_dashboard.html',
-                                 stats=stats,
-                                 recent_donations=recent_donations)
-                                 
         elif role == 'organization':
-            available_donations = Donation.query.filter_by(status='available').order_by(Donation.expiry_date).all()
-            my_requests = DonationRequest.query.filter_by(requester_id=session['user_id']).order_by(desc(DonationRequest.created_at)).limit(5).all()
-            assigned_volunteers = Volunteer.query.filter_by(assigned_agent_id=session['user_id']).all()
+            available_donations = FoodDonation.query.filter_by(status='available').order_by(FoodDonation.expiry_date).all()
+            my_requests = FoodRequest.query.filter_by(requester_id=session['user_id']).order_by(desc(FoodRequest.created_at)).limit(5).all()
+            assigned_volunteers = Volunteer.query.filter_by(organization_id=session['user_id']).all()
             
-            return render_template('organization_dashboard.html',
-                                 available_donations=available_donations,
-                                 my_requests=my_requests,
-                                 volunteers=assigned_volunteers)
+            context.update({
+                'available_donations': available_donations,
+                'my_requests': my_requests,
+                'volunteers': assigned_volunteers
+            })
+            
+            return render_template('organization_dashboard.html', **context)
         
         elif role == 'volunteer':
             volunteer = Volunteer.query.filter_by(user_id=session['user_id']).first()
-            assigned_requests = DonationRequest.query.filter_by(volunteer_id=volunteer.id if volunteer else None).all()
+            assigned_requests = FoodRequest.query.filter_by(volunteer_id=volunteer.id if volunteer else None).all()
             
-            return render_template('volunteer_dashboard.html',
-                                 volunteer=volunteer,
-                                 assigned_requests=assigned_requests)
+            context.update({
+                'volunteer': volunteer,
+                'assigned_requests': assigned_requests
+            })
+            
+            return render_template('volunteer_dashboard.html', **context)
                                  
         elif role == 'admin':
             stats = {
-                'total_donations': Donation.query.count(),
-                'pending_requests': DonationRequest.query.filter_by(status='pending').count(),
+                'total_donations': FoodDonation.query.count(),
+                'pending_requests': FoodRequest.query.filter_by(status='pending').count(),
                 'total_volunteers': Volunteer.query.count(),
                 'total_users': User.query.count()
             }
-            pending_requests = DonationRequest.query.filter_by(status='pending').all()
+            pending_requests = FoodRequest.query.filter_by(status='pending').all()
             volunteers = Volunteer.query.all()
             
-            return render_template('admin_dashboard.html',
-                                 stats=stats,
-                                 pending_requests=pending_requests,
-                                 volunteers=volunteers)
-                                 
+            context.update({
+                'stats': stats,
+                'pending_requests': pending_requests,
+                'volunteers': volunteers
+            })
+            
+            return render_template('admin_dashboard.html', **context)
+            
         else:
             flash('Invalid user role', 'danger')
             return redirect(url_for('logout'))
@@ -260,7 +290,7 @@ def donate_food():
     
     if request.method == 'POST' and form.validate_on_submit():
         try:
-            donation = Donation(
+            donation = FoodDonation(
                 item_name=form.item_name.data,
                 donation_type=form.donation_type.data,
                 quantity=form.quantity.data,
@@ -286,27 +316,27 @@ def donate_food():
 @login_required
 @role_required('donor')
 def manage_donations():
-    donations = Donation.query.filter_by(
+    donations = FoodDonation.query.filter_by(
         user_id=session['user_id']
-    ).order_by(desc(Donation.created_at)).all()
+    ).order_by(desc(FoodDonation.created_at)).all()
     return render_template('manage_donations.html', donations=donations)
 
 @app.route('/browse-donations')
 @login_required
 @role_required(['organization', 'volunteer'])
 def browse_donations():
-    donations = Donation.query.filter_by(
+    donations = FoodDonation.query.filter_by(
         status='available'
-    ).order_by(Donation.expiry_date).all()
+    ).order_by(FoodDonation.expiry_date).all()
     return render_template('browse_donations.html', donations=donations)
 
 @app.route('/my-requests')
 @login_required
 @role_required('organization')  # Fix role name: 'recipient' -> 'organization'
 def my_requests():
-    requests = DonationRequest.query.filter_by(
+    requests = FoodRequest.query.filter_by(
         requester_id=session['user_id']
-    ).order_by(desc(DonationRequest.created_at)).all()
+    ).order_by(desc(FoodRequest.created_at)).all()
     return render_template('my_requests.html', requests=requests)
 
 @app.route('/request-food/<int:donation_id>', methods=['POST'])
@@ -314,12 +344,12 @@ def my_requests():
 @role_required(['organization', 'volunteer'])
 def request_food(donation_id):
     try:
-        donation = Donation.query.get_or_404(donation_id)
+        donation = FoodDonation.query.get_or_404(donation_id)
         if donation.status != 'available':
             flash('This donation is no longer available.', 'danger')
             return redirect(url_for('browse_donations'))
             
-        existing_request = DonationRequest.query.filter_by(
+        existing_request = FoodRequest.query.filter_by(
             donation_id=donation_id,
             requester_id=session['user_id']
         ).first()
@@ -328,7 +358,7 @@ def request_food(donation_id):
             flash('You have already requested this donation.', 'warning')
             return redirect(url_for('browse_donations'))
             
-        request = DonationRequest(
+        request = FoodRequest(
             donation_id=donation_id,
             requester_id=session['user_id']
         )
@@ -348,7 +378,7 @@ def request_food(donation_id):
 @role_required(['admin', 'donor'])
 def update_request(request_id, status):
     try:
-        food_request = DonationRequest.query.get_or_404(request_id)
+        food_request = FoodRequest.query.get_or_404(request_id)
         
         # Verify authorization
         if session['role'] == 'donor' and food_request.donation.user_id != session['user_id']:
@@ -387,7 +417,7 @@ def update_request(request_id, status):
 @login_required
 @role_required('donor')
 def edit_donation(id):
-    donation = Donation.query.get_or_404(id)
+    donation = FoodDonation.query.get_or_404(id)
     
     if donation.user_id != session['user_id']:
         flash('You can only edit your own donations.', 'danger')
@@ -413,7 +443,7 @@ def edit_donation(id):
 @role_required('donor')
 def delete_donation(id):
     try:
-        donation = Donation.query.get_or_404(id)
+        donation = FoodDonation.query.get_or_404(id)
         if donation.user_id != session['user_id']:
             flash('You can only delete your own donations.', 'danger')
             return redirect(url_for('manage_donations'))
@@ -459,7 +489,7 @@ def logout():
 def assign_volunteer(volunteer_id, request_id):
     try:
         volunteer = Volunteer.query.get_or_404(volunteer_id)
-        request = DonationRequest.query.get_or_404(request_id)
+        request = FoodRequest.query.get_or_404(request_id)
         
         if session['role'] == 'organization' and volunteer.assigned_agent_id != session['user_id']:
             flash('You can only assign volunteers assigned to your organization.', 'danger')
@@ -515,17 +545,17 @@ def admin_dashboard():
     try:
         # Get system statistics
         stats = {
-            'total_donations': Donation.query.count(),
-            'active_donations': Donation.query.filter_by(status='available').count(),
-            'total_requests': DonationRequest.query.count(),
-            'pending_requests': DonationRequest.query.filter_by(status='pending').count(),
+            'total_donations': FoodDonation.query.count(),
+            'active_donations': FoodDonation.query.filter_by(status='available').count(),
+            'total_requests': FoodRequest.query.count(),
+            'pending_requests': FoodRequest.query.filter_by(status='pending').count(),
             'total_users': User.query.count(),
             'total_volunteers': Volunteer.query.count()
         }
         
         # Get recent activity
-        recent_donations = Donation.query.order_by(desc(Donation.created_at)).limit(5).all()
-        recent_requests = DonationRequest.query.order_by(desc(DonationRequest.created_at)).limit(5).all()
+        recent_donations = FoodDonation.query.order_by(desc(FoodDonation.created_at)).limit(5).all()
+        recent_requests = FoodRequest.query.order_by(desc(FoodRequest.created_at)).limit(5).all()
         
         # Get user counts by role
         role_counts = db.session.query(
@@ -561,6 +591,9 @@ def manage_volunteers():
             
             if action == 'assign':
                 if session['role'] == 'organization':
+                    if volunteer.assigned_agent_id:
+                        flash('Volunteer already assigned', 'danger')
+                        return redirect(url_for('manage_volunteers'))
                     volunteer.assigned_agent_id = session['user_id']
                 else:  # admin
                     org_id = request.form.get('organization_id')
@@ -587,12 +620,10 @@ def manage_volunteers():
             volunteers = Volunteer.query.filter_by(assigned_agent_id=session['user_id']).all()
             organizations = None
             
-        return render_template(
-            'manage_volunteers.html',
-            volunteers=volunteers,
-            organizations=organizations
-        )
-        
+        return render_template('manage_volunteers.html', 
+                             volunteers=volunteers,
+                             organizations=organizations)
+                             
     except Exception as e:
         logger.error(f"Error in manage_volunteers: {str(e)}")
         db.session.rollback()
@@ -605,7 +636,7 @@ def manage_volunteers():
 def handle_request(request_id):
     """Handle donation requests (approve/deny/complete)"""
     try:
-        request = DonationRequest.query.get_or_404(request_id)
+        request = FoodRequest.query.get_or_404(request_id)
         action = request.form.get('action')
         
         # Verify authorization
@@ -638,6 +669,123 @@ def handle_request(request_id):
         flash('Error processing request', 'danger')
         
     return redirect(url_for('manage_donations'))
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    """User settings page for managing preferences"""
+    try:
+        user = User.query.get(session['user_id'])
+        form = UserPreferencesForm(obj=user)
+
+        if request.method == 'POST' and form.validate_on_submit():
+            form.populate_obj(user)
+            db.session.commit()
+            session['theme'] = user.theme_preference
+            flash('Settings updated successfully!', 'success')
+            return redirect(url_for('settings'))
+
+        return render_template('settings.html', form=form)
+
+    except Exception as e:
+        logger.error(f"Settings error: {str(e)}")
+        flash('Error updating settings.', 'danger')
+        return redirect(url_for('dashboard'))
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    """User profile management"""
+    try:
+        user = User.query.get(session['user_id'])
+        
+        if request.method == 'POST':
+            user.name = request.form.get('name', user.name)
+            if request.form.get('new_password'):
+                if check_password_hash(user.password, request.form.get('current_password', '')):
+                    user.password = generate_password_hash(request.form.get('new_password'))
+                    flash('Password updated successfully!', 'success')
+                else:
+                    flash('Current password is incorrect.', 'danger')
+                    return redirect(url_for('profile'))
+            
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))
+
+        return render_template('profile.html', user=user)
+
+    except Exception as e:
+        logger.error(f"Profile error: {str(e)}")
+        flash('Error updating profile.', 'danger')
+        return redirect(url_for('dashboard'))
+
+# Add receipt generation route
+@app.route('/generate-receipt/<int:donation_id>')
+@login_required
+@role_required('admin')
+def generate_receipt(donation_id):
+    try:
+        donation = FoodDonation.query.get_or_404(donation_id)
+        request = FoodRequest.query.filter_by(
+            donation_id=donation_id,
+            status='completed'
+        ).first()
+        
+        if not request:
+            flash('Receipt can only be generated for completed donations', 'warning')
+            return redirect(url_for('admin_dashboard'))
+            
+        receipt = DonationReceipt(
+            donation_id=donation_id,
+            generated_by=session['user_id'],
+            receipt_number=f"RCP-{donation.id}-{request.id}"
+        )
+        db.session.add(receipt)
+        db.session.commit()
+        
+        return render_template('receipt_generation.html', receipt=receipt)
+        
+    except Exception as e:
+        logger.error(f"Receipt generation error: {str(e)}")
+        flash('Error generating receipt', 'danger')
+        return redirect(url_for('admin_dashboard'))
+
+@app.route('/update-delivery-status/<int:request_id>', methods=['POST'])
+@login_required
+@role_required('volunteer')
+def update_delivery_status(request_id):
+    """Update donation delivery status by volunteer"""
+    try:
+        donation_request = FoodRequest.query.get_or_404(request_id)
+        volunteer = Volunteer.query.filter_by(user_id=session['user_id']).first()
+        
+        if donation_request.volunteer_id != volunteer.id:
+            flash('Unauthorized action', 'danger')
+            return redirect(url_for('dashboard'))
+            
+        status = request.form.get('status')
+        notes = request.form.get('notes')
+        
+        if status in ['picked_up', 'in_transit', 'delivered']:
+            donation_request.delivery_status = status
+            donation_request.delivery_notes = notes
+            
+            if status == 'delivered':
+                donation_request.status = 'completed'
+                donation_request.donation.status = 'collected'
+                
+            db.session.commit()
+            flash('Delivery status updated successfully', 'success')
+        else:
+            flash('Invalid status', 'danger')
+            
+        return redirect(url_for('dashboard'))
+        
+    except Exception as e:
+        logger.error(f"Status update error: {str(e)}")
+        flash('Error updating status', 'danger')
+        return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
     try:

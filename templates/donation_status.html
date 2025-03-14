@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Donation Status{% endblock %}
+
+{% block content %}
+<div class="status-container">
+    <h2>Donation Status Tracker</h2>
+
+    <div class="status-filters">
+        <input type="text" placeholder="Search donations..." class="form-control">
+        <select class="form-select">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="in-transit">In Transit</option>
+            <option value="delivered">Delivered</option>
+        </select>
+    </div>
+
+    <div class="status-cards">
+        {% for donation in donations %}
+        <div class="status-card">
+            <div class="status-header">
+                <h3>{{ donation.food_name }}</h3>
+                <span class="badge {{ donation.status }}">{{ donation.status }}</span>
+            </div>
+            <div class="status-details">
+                <p><strong>Donor:</strong> {{ donation.donor_name }}</p>
+                <p><strong>Organization:</strong> {{ donation.organization_name }}</p>
+                <p><strong>Volunteer:</strong> {{ donation.volunteer_name }}</p>
+                <p><strong>Updated:</strong> {{ donation.last_updated }}</p>
+            </div>
+            <div class="status-timeline">
+                {% for status in donation.status_timeline %}
+                <div class="timeline-item {{ status.status }}">
+                    <span class="time">{{ status.time }}</span>
+                    <span class="status-text">{{ status.text }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="status-actions">
+                <button onclick="updateStatus('{{ donation.id }}')" class="btn-primary">Update Status</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

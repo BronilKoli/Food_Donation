@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Volunteer Management{% endblock %}
+
+{% block content %}
+<div class="volunteer-management">
+    <h2>Volunteer Management</h2>
+
+    <div class="volunteer-actions">
+        <button class="btn-primary" onclick="addVolunteer()">Add Volunteer</button>
+        <div class="search-box">
+            <input type="text" placeholder="Search volunteers..." id="volunteer-search">
+        </div>
+    </div>
+
+    <div class="volunteers-list">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Tasks Completed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for volunteer in volunteers %}
+                <tr>
+                    <td>{{ volunteer.name }}</td>
+                    <td>{{ volunteer.contact }}</td>
+                    <td>{{ volunteer.status }}</td>
+                    <td>{{ volunteer.tasks_completed }}</td>
+                    <td>
+                        <button onclick="assignTask('{{ volunteer.id }}')" class="btn-secondary">
+                            Assign Task
+                        </button>
+                        <button onclick="viewHistory('{{ volunteer.id }}')" class="btn-info">
+                            View History
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

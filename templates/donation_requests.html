@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Donation Requests{% endblock %}
+
+{% block content %}
+<div class="requests-container">
+    <h2>Donation Requests</h2>
+    
+    <div class="filters">
+        <select id="status-filter" class="form-select">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="completed">Completed</option>
+        </select>
+        
+        <input type="date" id="date-filter" class="form-control">
+    </div>
+
+    <div class="requests-list">
+        {% for request in requests %}
+        <div class="request-card">
+            <div class="request-header">
+                <h3>{{ request.donation.food_name }}</h3>
+                <span class="status {{ request.status }}">{{ request.status }}</span>
+            </div>
+            <div class="request-body">
+                <p><strong>Organization:</strong> {{ request.organization.name }}</p>
+                <p><strong>Requested Date:</strong> {{ request.created_at }}</p>
+                <p><strong>Quantity:</strong> {{ request.quantity }} {{ request.unit }}</p>
+            </div>
+            <div class="request-actions">
+                {% if current_user.is_admin %}
+                <button class="btn-secondary" onclick="approveRequest('{{ request.id }}')">
+                    Approve
+                </button>
+                <button class="btn-danger" onclick="rejectRequest('{{ request.id }}')">
+                    Reject
+                </button>
+                {% endif %}
+                <a href="{{ url_for('request_details', id=request.id) }}" class="btn-primary">
+                    View Details
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

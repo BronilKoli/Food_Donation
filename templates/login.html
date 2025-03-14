@@ -1,68 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Login - FoodShare{% endblock %}
+{% block title %}Login - Food Donation System{% endblock %}
 
 {% block content %}
-<div class="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white dark:bg-dark-card py-8 px-4 shadow-lg rounded-lg sm:px-10 transition-colors duration-200">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Welcome Back</h2>
-                <p class="text-gray-600 dark:text-gray-400 mt-2">Sign in to your account</p>
-            </div>
-
-            <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
-                <!-- Email Field -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-envelope mr-2"></i>Email
-                    </label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           value="{{ request.form.email or '' }}"
-                           required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                </div>
-
-                <!-- Password Field -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-lock mr-2"></i>Password
-                    </label>
-                    <input type="password" 
-                           id="password" 
-                           name="password" 
-                           required
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 
-                                  rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" 
-                        class="w-full flex justify-center items-center py-2 px-4 border border-transparent 
-                               rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 
-                               hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 
-                               focus:outline-none focus:ring-2 focus:ring-offset-2 
-                               focus:ring-blue-500 transition-colors duration-200">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
-                </button>
-            </form>
-
-            <!-- Sign Up Link -->
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Don't have an account? 
-                    <a href="{{ url_for('signup') }}" 
-                       class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
-                        <i class="fas fa-user-plus mr-1"></i>Sign up
-                    </a>
-                </p>
-            </div>
+<div class="auth-container">
+    <h2>Login</h2>
+    <form method="POST" class="auth-form">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+            {% if form.email.errors %}
+                <div class="errors">{{ form.email.errors[0] }}</div>
+            {% endif %}
         </div>
+
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control") }}
+            {% if form.password.errors %}
+                <div class="errors">{{ form.password.errors[0] }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group checkbox">
+            {{ form.remember_me(class="form-check-input") }}
+            {{ form.remember_me.label }}
+        </div>
+
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+    <div class="auth-links">
+        <a href="{{ url_for('signup') }}">Create an account</a>
     </div>
 </div>
 {% endblock %}

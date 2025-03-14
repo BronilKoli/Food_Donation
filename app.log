@@ -1257,3 +1257,118 @@
 2025-03-14 20:00:40,259 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:40] "GET /login HTTP/1.1" 200 -
 2025-03-14 20:00:50,076 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:50] "GET /signup HTTP/1.1" 200 -
 2025-03-14 20:00:58,312 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 20:00:58] "GET /signup HTTP/1.1" 200 -
+2025-03-14 21:37:31,548 - __main__ - INFO - Database tables already exist
+2025-03-14 21:37:31,553 - __main__ - INFO - Database tables already exist
+2025-03-14 21:37:31,553 - __main__ - INFO - Database initialized successfully!
+2025-03-14 21:37:31,594 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-14 21:37:31,595 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-14 21:37:31,597 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 21:37:32,216 - __main__ - INFO - Database tables already exist
+2025-03-14 21:37:32,221 - __main__ - INFO - Database tables already exist
+2025-03-14 21:37:32,222 - __main__ - INFO - Database initialized successfully!
+2025-03-14 21:37:32,237 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 21:37:32,242 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 21:38:00,266 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:00] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:00,296 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:00] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:00,809 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-14 21:38:03,541 - __main__ - WARNING - Failed login attempt for email: temp_test@example.com
+2025-03-14 21:38:03,542 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:03] "POST /login HTTP/1.1" 200 -
+2025-03-14 21:38:06,592 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:06] "GET /signup HTTP/1.1" 200 -
+2025-03-14 21:38:44,650 - __main__ - INFO - Signup form data: {'email': 'temp_test@example.com', 'password': 'test_password', 'confirm_password': 'test_password', 'name': 'Test User', 'role': 'donor', 'contact': '', 'address': ''}
+2025-03-14 21:38:44,814 - __main__ - INFO - User created: temp_test@example.com, ID: 1
+2025-03-14 21:38:44,816 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:44] "[32mPOST /signup HTTP/1.1[0m" 302 -
+2025-03-14 21:38:44,829 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:44] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:46,746 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 21:38:46,748 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:46] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 21:38:46,788 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 21:38:46,789 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:46] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:46,796 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:46] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:48,315 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 21:38:48,316 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:48] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 21:38:48,333 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 21:38:48,334 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:48] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:48,341 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:48] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:56,529 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 21:38:56,531 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:56] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 21:38:56,546 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 21:38:56,548 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:56] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:56,558 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:56] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:57,813 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 21:38:57,815 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:57] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 21:38:57,832 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 21:38:57,834 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:57] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:57,845 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:57] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:38:58,271 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 21:38:58,272 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:58] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 21:38:58,280 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 21:38:58,280 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:58] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 21:38:58,286 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:38:58] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:46:59,571 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:46:59] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:47:02,439 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:47:02] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:47:02,702 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:47:02] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:47:03,073 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:47:03] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:47:03,409 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:47:03] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:51:07,596 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:51:07] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:51:09,745 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:51:09] "GET /signup HTTP/1.1" 200 -
+2025-03-14 21:51:11,406 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:51:11] "GET /signup HTTP/1.1" 200 -
+2025-03-14 21:54:41,129 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:41] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:41,854 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:41] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:42,056 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:42] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:42,401 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:42] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:42,636 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:42] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:42,949 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:42] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:54:43,270 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:54:43] "GET /login HTTP/1.1" 200 -
+2025-03-14 21:56:33,312 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 21:56:33] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:20:59,279 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:20:59] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:21:04,248 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:21:04] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:21:04,962 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:21:04] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:21:05,361 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:21:05] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:21:07,044 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:21:07] "GET /signup HTTP/1.1" 200 -
+2025-03-14 22:21:08,963 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:21:08] "GET /signup HTTP/1.1" 200 -
+2025-03-14 22:23:43,235 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:23:43] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:23:45,335 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:23:45,340 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:23:45] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:23:45,377 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'settings'. Did you mean 'static' instead?
+2025-03-14 22:23:45,377 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:23:45] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:23:45,385 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:23:45] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:26:01,603 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 22:26:01,810 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 22:26:02,607 - __main__ - INFO - Database tables already exist
+2025-03-14 22:26:02,612 - __main__ - INFO - Database tables already exist
+2025-03-14 22:26:02,613 - __main__ - INFO - Database initialized successfully!
+2025-03-14 22:26:02,640 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 22:26:02,645 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 22:26:05,496 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:26:05,497 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:05] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:26:05,535 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'donate_item'. Did you mean 'donate_food' instead?
+2025-03-14 22:26:05,536 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:05] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:26:05,544 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:05] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:26:06,872 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:26:06,873 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:06] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:26:06,890 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'donate_item'. Did you mean 'donate_food' instead?
+2025-03-14 22:26:06,891 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:06] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:26:06,899 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:06] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:26:07,750 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:26:07,751 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:07] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:26:07,765 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'donate_item'. Did you mean 'donate_food' instead?
+2025-03-14 22:26:07,766 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:07] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:26:07,776 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:07] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:26:08,529 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:26:08,531 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:08] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:26:08,541 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'donate_item'. Did you mean 'donate_food' instead?
+2025-03-14 22:26:08,542 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:08] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:26:08,551 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:26:08] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:28:04,675 - werkzeug - INFO -  * Detected change in 'E:\\VSCODE\\Food_Donation\\app.py', reloading
+2025-03-14 22:28:04,810 - werkzeug - INFO -  * Restarting with stat
+2025-03-14 22:28:05,467 - __main__ - INFO - Database tables already exist
+2025-03-14 22:28:05,475 - __main__ - INFO - Database tables already exist
+2025-03-14 22:28:05,476 - __main__ - INFO - Database initialized successfully!
+2025-03-14 22:28:05,498 - werkzeug - WARNING -  * Debugger is active!
+2025-03-14 22:28:05,503 - werkzeug - INFO -  * Debugger PIN: 981-244-711
+2025-03-14 22:28:58,828 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:28:58] "GET /login HTTP/1.1" 200 -
+2025-03-14 22:29:00,690 - __main__ - INFO - User logged in successfully: temp_test@example.com
+2025-03-14 22:29:00,694 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:29:00] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-03-14 22:29:00,733 - __main__ - ERROR - Dashboard error: Could not build url for endpoint 'donate_item'. Did you mean 'donate_food' instead?
+2025-03-14 22:29:00,734 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:29:00] "[32mGET / HTTP/1.1[0m" 302 -
+2025-03-14 22:29:00,744 - werkzeug - INFO - 127.0.0.1 - - [14/Mar/2025 22:29:00] "GET /login HTTP/1.1" 200 -

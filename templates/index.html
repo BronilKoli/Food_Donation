@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Food Donation System{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Make a Difference Today</h1>
+    <p>Connect donors with those in need through our food donation platform</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('signup') }}" class="btn-primary">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+    </div>
+</div>
+
+<section class="features">
+    <h2>How It Works</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>For Donors</h3>
+            <p>Donate surplus food and track your contributions</p>
+        </div>
+        <div class="feature-card">
+            <h3>For Organizations</h3>
+            <p>Request donations and manage distributions</p>
+        </div>
+        <div class="feature-card">
+            <h3>For Volunteers</h3>
+            <p>Help deliver food to those who need it most</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
