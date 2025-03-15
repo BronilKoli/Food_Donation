@@ -8,3 +8,32 @@ MarkupSafe
 itsdangerous
 click
 blinker
+# Authentication
+Flask-Login
+Flask-WTF
+email-validator
+
+# Database migrations
+Flask-Migrate
+alembic
+
+# Form handling
+WTForms
+
+# Date/time handling
+datetime
+
+# Environment variables
+python-dotenv>=0.19.0
+
+# Security
+Flask-Security-Too
+bcrypt
+
+# Testing
+pytest
+pytest-cov
+
+# Development tools
+black
+flake8
