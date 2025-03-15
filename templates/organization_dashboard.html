@@ -3,13 +3,13 @@
 {% block title %}Organization Dashboard{% endblock %}
 
 {% block content %}
-<div class="dashboard">
-    <div class="dashboard-header">
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
         <h2>{{ organization.name }} Dashboard</h2>
-        <a href="{{ url_for('view_donations') }}" class="btn-primary">View Available Donations</a>
+        <a href="{{ url_for('view_donations') }}" class="btn btn-primary">View Available Donations</a>
     </div>
 
-    <div class="stats-grid">
+    <div class="stats-grid mb-3">
         <div class="stat-card">
             <h3>Pending Requests</h3>
             <p>{{ stats.pending_requests }}</p>
@@ -24,30 +24,34 @@
         </div>
     </div>
 
-    <div class="requests-section">
-        <h3>Recent Requests</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Donation</th>
-                    <th>Donor</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in recent_requests %}
-                <tr>
-                    <td>{{ request.donation.name }}</td>
-                    <td>{{ request.donor.name }}</td>
-                    <td>{{ request.status }}</td>
-                    <td>
-                        <a href="{{ url_for('view_request', id=request.id) }}">View</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="requests-section mt-3">
+        <div class="dashboard-header mb-3">
+            <h3>Recent Requests</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Donation</th>
+                        <th>Donor</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in recent_requests %}
+                    <tr>
+                        <td>{{ request.donation.name }}</td>
+                        <td>{{ request.donor.name }}</td>
+                        <td><span class="badge status {{ request.status }}">{{ request.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('view_request', id=request.id) }}" class="btn btn-secondary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -3,58 +3,70 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<div class="admin-dashboard">
-    <div class="dashboard-header">
+<div class="admin-dashboard container dashboard">
+    <div class="dashboard-header mb-3">
         <h2>Admin Control Panel</h2>
     </div>
 
-    <div class="admin-grid">
-        <div class="admin-card">
+    <div class="admin-grid stats-grid mb-3">
+        <div class="admin-card stat-card">
             <h3>Users</h3>
-            <p>Total: {{ stats.total_users }}</p>
-            <a href="{{ url_for('manage_users') }}" class="btn-primary">Manage Users</a>
+            <p>{{ stats.total_users }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('manage_users') }}" class="btn btn-primary">Manage Users</a>
+            </div>
         </div>
-        <div class="admin-card">
+        <div class="admin-card stat-card">
             <h3>Donations</h3>
-            <p>Active: {{ stats.active_donations }}</p>
-            <a href="{{ url_for('manage_donations') }}" class="btn-primary">Manage Donations</a>
+            <p>{{ stats.active_donations }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('manage_donations') }}" class="btn btn-primary">Manage Donations</a>
+            </div>
         </div>
-        <div class="admin-card">
+        <div class="admin-card stat-card">
             <h3>Organizations</h3>
-            <p>Registered: {{ stats.total_organizations }}</p>
-            <a href="{{ url_for('manage_organizations') }}" class="btn-primary">Manage Organizations</a>
+            <p>{{ stats.total_organizations }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('manage_organizations') }}" class="btn btn-primary">Manage Organizations</a>
+            </div>
         </div>
-        <div class="admin-card">
+        <div class="admin-card stat-card">
             <h3>Volunteers</h3>
-            <p>Active: {{ stats.active_volunteers }}</p>
-            <a href="{{ url_for('manage_volunteers') }}" class="btn-primary">Manage Volunteers</a>
+            <p>{{ stats.active_volunteers }}</p>
+            <div class="card-actions">
+                <a href="{{ url_for('manage_volunteers') }}" class="btn btn-primary">Manage Volunteers</a>
+            </div>
         </div>
     </div>
 
-    <div class="recent-activity">
-        <h3>Recent Activity</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Action</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for activity in recent_activities %}
-                <tr>
-                    <td>{{ activity.action }}</td>
-                    <td>{{ activity.user }}</td>
-                    <td>{{ activity.date }}</td>
-                    <td>
-                        <a href="{{ url_for('activity_details', id=activity.id) }}">View</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="recent-activity mt-3">
+        <div class="dashboard-header mb-3">
+            <h3>Recent Activity</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in recent_activities %}
+                    <tr>
+                        <td>{{ activity.action }}</td>
+                        <td>{{ activity.user }}</td>
+                        <td>{{ activity.date }}</td>
+                        <td>
+                            <a href="{{ url_for('activity_details', id=activity.id) }}" class="btn btn-secondary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

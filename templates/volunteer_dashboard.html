@@ -3,25 +3,27 @@
 {% block title %}Volunteer Dashboard{% endblock %}
 
 {% block content %}
-<div class="dashboard">
-    <div class="dashboard-header">
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
         <h2>Welcome {{ volunteer.name }}</h2>
     </div>
 
-    <div class="tasks-section">
-        <h3>Current Tasks</h3>
+    <div class="tasks-section mb-3">
+        <div class="dashboard-header mb-3">
+            <h3>Current Tasks</h3>
+        </div>
         <div class="task-cards">
             {% for task in current_tasks %}
             <div class="task-card">
                 <h4>{{ task.title }}</h4>
                 <p>From: {{ task.pickup_location }}</p>
                 <p>To: {{ task.delivery_location }}</p>
-                <p>Status: {{ task.status }}</p>
-                <div class="task-actions">
-                    <button class="btn-secondary" onclick="updateStatus('{{ task.id }}')">
+                <p><span class="badge status {{ task.status }}">{{ task.status }}</span></p>
+                <div class="task-actions d-flex gap-2">
+                    <button class="btn btn-secondary" onclick="updateStatus('{{ task.id }}')">
                         Update Status
                     </button>
-                    <a href="{{ url_for('task_details', id=task.id) }}" class="btn-primary">
+                    <a href="{{ url_for('task_details', id=task.id) }}" class="btn btn-primary">
                         View Details
                     </a>
                 </div>
@@ -30,26 +32,30 @@
         </div>
     </div>
 
-    <div class="completed-tasks">
-        <h3>Completed Tasks</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Task</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for task in completed_tasks %}
-                <tr>
-                    <td>{{ task.title }}</td>
-                    <td>{{ task.completed_date }}</td>
-                    <td>Completed</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="completed-tasks mt-3">
+        <div class="dashboard-header mb-3">
+            <h3>Completed Tasks</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in completed_tasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.completed_date }}</td>
+                        <td><span class="badge status completed">Completed</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

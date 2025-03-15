@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Organization Management{% endblock %}
+
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
+        <h2>Organization Management</h2>
+        <button class="btn btn-primary" onclick="addOrganization()">Add Organization</button>
+    </div>
+    
+    <div class="filters d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex gap-2">
+            <select class="form-select" id="status-filter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="pending">Pending Approval</option>
+            </select>
+            <button class="btn btn-secondary" onclick="applyFilters()">Filter</button>
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search organizations..." id="org-search" class="form-control">
+        </div>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Requests</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for org in organizations %}
+                <tr>
+                    <td>{{ org.id }}</td>
+                    <td>{{ org.name }}</td>
+                    <td>{{ org.email }}</td>
+                    <td>{{ org.address }}</td>
+                    <td>{{ org.requests.count() if org.requests else 0 }}</td>
+                    <td>
+                        {% if org.is_active %}
+                            <span class="badge status active">Active</span>
+                        {% else %}
+                            <span class="badge status inactive">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="d-flex gap-2">
+                        <button onclick="viewDetails('{{ org.id }}')" class="btn btn-info">Details</button>
+                        <button onclick="editOrganization('{{ org.id }}')" class="btn btn-secondary">Edit</button>
+                        <button onclick="manageVolunteers('{{ org.id }}')" class="btn btn-primary">Manage Volunteers</button>
+                        {% if not org.is_active %}
+                            <button onclick="activateOrganization('{{ org.id }}')" class="btn btn-success">Activate</button>
+                        {% else %}
+                            <button onclick="deactivateOrganization('{{ org.id }}')" class="btn btn-warning">Deactivate</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not organizations %}
+                <tr>
+                    <td colspan="7" class="text-center">No organizations found</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    function addOrganization() {
+        window.location.href = "{{ url_for('signup') }}?predefined_role=organization";
+    }
+    
+    function viewDetails(orgId) {
+        window.location.href = `/organization-details/${orgId}`;
+    }
+    
+    function editOrganization(orgId) {
+        window.location.href = `/edit-organization/${orgId}`;
+    }
+    
+    function manageVolunteers(orgId) {
+        window.location.href = `/manage-volunteers?org_id=${orgId}`;
+    }
+    
+    function activateOrganization(orgId) {
+        window.location.href = `/activate-organization/${orgId}`;
+    }
+    
+    function deactivateOrganization(orgId) {
+        window.location.href = `/deactivate-organization/${orgId}`;
+    }
+    
+    function applyFilters() {
+        const status = document.getElementById('status-filter').value;
+        const searchQuery = document.getElementById('org-search').value;
+        
+        window.location.href = `/manage-organizations?status=${status}&search=${searchQuery}`;
+    }
+</script>
+{% endblock %}
+{% endblock %}

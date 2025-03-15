@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Task Details{% endblock %}
+
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
+        <h2>Task Details</h2>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="task-detail-card">
+        <div class="task-header">
+            <h3>{{ task.donation.food_name }}</h3>
+            <span class="badge status {{ task.status }}">{{ task.status }}</span>
+        </div>
+        
+        <div class="task-info">
+            <div class="info-section">
+                <h4>Pickup Information</h4>
+                <p><strong>Address:</strong> {{ task.donation.pickup_address }}</p>
+                <p><strong>Donor:</strong> {{ task.donation.donor.name }}</p>
+                <p><strong>Contact:</strong> {{ task.donation.donor.contact_number }}</p>
+            </div>
+            
+            <div class="info-section">
+                <h4>Delivery Information</h4>
+                <p><strong>Organization:</strong> {{ task.requester.name }}</p>
+                <p><strong>Address:</strong> {{ task.requester.address }}</p>
+                <p><strong>Contact:</strong> {{ task.requester.contact_number }}</p>
+            </div>
+            
+            <div class="info-section">
+                <h4>Donation Details</h4>
+                <p><strong>Items:</strong> {{ task.donation.food_name }}</p>
+                <p><strong>Quantity:</strong> {{ task.donation.quantity }} {{ task.donation.unit }}</p>
+                {% if task.donation.expiry_date %}
+                <p><strong>Expiry:</strong> {{ task.donation.expiry_date.strftime('%Y-%m-%d') }}</p>
+                {% endif %}
+                {% if task.donation.storage_instructions %}
+                <p><strong>Storage:</strong> {{ task.donation.storage_instructions }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="delivery-status-section">
+            <h4>Delivery Status</h4>
+            <p>Current Status: <span class="badge status {{ task.delivery_status or 'pending' }}">{{ task.delivery_status or 'Not Started' }}</span></p>
+            
+            <form action="{{ url_for('update_delivery_status', request_id=task.id) }}" method="POST" class="status-update-form">
+                <div class="form-group">
+                    <label for="status">Update Status:</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="picked_up" {% if task.delivery_status == 'picked_up' %}selected{% endif %}>Picked Up</option>
+                        <option value="in_transit" {% if task.delivery_status == 'in_transit' %}selected{% endif %}>In Transit</option>
+                        <option value="delivered" {% if task.delivery_status == 'delivered' %}selected{% endif %}>Delivered</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Delivery Notes:</label>
+                    <textarea name="notes" id="notes" class="form-control">{{ task.delivery_notes or '' }}</textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Update Status</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .task-detail-card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .task-header {
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--bg-secondary);
+    }
+    
+    .task-info {
+        padding: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .info-section {
+        padding: 1rem;
+        background-color: var(--bg-tertiary);
+        border-radius: var(--border-radius);
+    }
+    
+    .info-section h4 {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+    
+    .delivery-status-section {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .status-update-form {
+        margin-top: 1rem;
+        padding: 1rem;
+        background-color: var(--bg-tertiary);
+        border-radius: var(--border-radius);
+    }
+</style>
+{% endblock %}

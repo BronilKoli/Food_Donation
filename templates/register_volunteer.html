@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Register as Volunteer{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="dashboard-header mb-3">
+            <h2>Register as Volunteer</h2>
+        </div>
+        
+        <form method="POST" class="volunteer-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.contact.label }}
+                {{ form.contact(class="form-control") }}
+                {% if form.contact.errors %}
+                    <div class="error-message">{{ form.contact.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.address.label }}
+                {{ form.address(class="form-control") }}
+                {% if form.address.errors %}
+                    <div class="error-message">{{ form.address.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.availability.label }}
+                {{ form.availability(class="form-select") }}
+                {% if form.availability.errors %}
+                    <div class="error-message">{{ form.availability.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group checkbox">
+                {{ form.has_vehicle(class="form-check-input") }}
+                {{ form.has_vehicle.label }}
+            </div>
+
+            <div class="form-group vehicle-type" id="vehicle-type-group" style="display: none;">
+                {{ form.vehicle_type.label }}
+                {{ form.vehicle_type(class="form-select") }}
+                {% if form.vehicle_type.errors %}
+                    <div class="error-message">{{ form.vehicle_type.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.preferred_area.label }}
+                {{ form.preferred_area(class="form-control") }}
+                {% if form.preferred_area.errors %}
+                    <div class="error-message">{{ form.preferred_area.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.max_distance.label }}
+                {{ form.max_distance(class="form-control", placeholder="Enter distance in km") }}
+                {% if form.max_distance.errors %}
+                    <div class="error-message">{{ form.max_distance.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.languages.label }}
+                {{ form.languages(class="form-control") }}
+                {% if form.languages.errors %}
+                    <div class="error-message">{{ form.languages.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.emergency_contact.label }}
+                {{ form.emergency_contact(class="form-control") }}
+                {% if form.emergency_contact.errors %}
+                    <div class="error-message">{{ form.emergency_contact.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Show/hide vehicle type field based on has_vehicle checkbox
+        const hasVehicleCheckbox = document.getElementById('has_vehicle');
+        const vehicleTypeGroup = document.getElementById('vehicle-type-group');
+        
+        function toggleVehicleType() {
+            if (hasVehicleCheckbox.checked) {
+                vehicleTypeGroup.style.display = 'block';
+            } else {
+                vehicleTypeGroup.style.display = 'none';
+            }
+        }
+        
+        // Initial state
+        toggleVehicleType();
+        
+        // Add event listener
+        hasVehicleCheckbox.addEventListener('change', toggleVehicleType);
+    });
+</script>
+{% endblock %}
+{% endblock %}

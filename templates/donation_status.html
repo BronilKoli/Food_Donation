@@ -3,10 +3,12 @@
 {% block title %}Donation Status{% endblock %}
 
 {% block content %}
-<div class="status-container">
-    <h2>Donation Status Tracker</h2>
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
+        <h2>Donation Status Tracker</h2>
+    </div>
 
-    <div class="status-filters">
+    <div class="status-filters d-flex justify-content-between align-items-center mb-3">
         <input type="text" placeholder="Search donations..." class="form-control">
         <select class="form-select">
             <option value="all">All Status</option>
@@ -21,7 +23,7 @@
         <div class="status-card">
             <div class="status-header">
                 <h3>{{ donation.food_name }}</h3>
-                <span class="badge {{ donation.status }}">{{ donation.status }}</span>
+                <span class="badge status {{ donation.status }}">{{ donation.status }}</span>
             </div>
             <div class="status-details">
                 <p><strong>Donor:</strong> {{ donation.donor_name }}</p>
@@ -38,7 +40,7 @@
                 {% endfor %}
             </div>
             <div class="status-actions">
-                <button onclick="updateStatus('{{ donation.id }}')" class="btn-primary">Update Status</button>
+                <button onclick="updateStatus('{{ donation.id }}')" class="btn btn-primary">Update Status</button>
             </div>
         </div>
         {% endfor %}

@@ -3,16 +3,16 @@
 {% block title %}Receipt Generation{% endblock %}
 
 {% block content %}
-<div class="receipt-container">
-    <div class="receipt-header">
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
         <h2>Generate Donation Receipt</h2>
-        <div class="receipt-actions">
-            <button class="btn-primary" onclick="generateReceipt()">Generate New Receipt</button>
-            <button class="btn-secondary" onclick="downloadAll()">Download All</button>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" onclick="generateReceipt()">Generate New Receipt</button>
+            <button class="btn btn-secondary" onclick="downloadAll()">Download All</button>
         </div>
     </div>
 
-    <div class="receipt-filters">
+    <div class="filters d-flex justify-content-between align-items-center mb-3">
         <input type="date" class="form-control" id="date-filter">
         <select class="form-select" id="donor-filter">
             <option value="">Select Donor</option>
@@ -22,7 +22,7 @@
         </select>
     </div>
 
-    <div class="receipts-list">
+    <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -40,9 +40,9 @@
                     <td>{{ receipt.donor_name }}</td>
                     <td>{{ receipt.date }}</td>
                     <td>{{ receipt.amount }}</td>
-                    <td>
-                        <button onclick="viewReceipt('{{ receipt.id }}')" class="btn-info">View</button>
-                        <button onclick="downloadReceipt('{{ receipt.id }}')" class="btn-secondary">Download</button>
+                    <td class="d-flex gap-2">
+                        <button onclick="viewReceipt('{{ receipt.id }}')" class="btn btn-info">View</button>
+                        <button onclick="downloadReceipt('{{ receipt.id }}')" class="btn btn-secondary">Download</button>
                     </td>
                 </tr>
                 {% endfor %}

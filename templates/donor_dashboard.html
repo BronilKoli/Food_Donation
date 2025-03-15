@@ -3,13 +3,13 @@
 {% block title %}Donor Dashboard - Food Donation System{% endblock %}
 
 {% block content %}
-<div class="dashboard">
-    <div class="dashboard-header">
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
         <h2>Welcome, {{ user.name }}</h2>
-        <a href="{{ url_for('donate_food') }}" class="btn-primary">New Donation</a>
+        <a href="{{ url_for('donate_food') }}" class="btn btn-primary">New Donation</a>
     </div>
 
-    <div class="stats-grid">
+    <div class="stats-grid mb-3">
         <div class="stat-card">
             <h3>Total Donations</h3>
             <p>{{ stats.total_donations }}</p>
@@ -24,8 +24,10 @@
         </div>
     </div>
 
-    <div class="recent-donations">
-        <h3>Recent Donations</h3>
+    <div class="recent-donations mt-3">
+        <div class="dashboard-header mb-3">
+            <h3>Recent Donations</h3>
+        </div>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -39,12 +41,13 @@
                 <tbody>
                     {% for donation in recent_donations %}
                     <tr>
-                        <td>{{ donation.item_name }}</td>
+                        <td>{{ donation.food_name }}</td>
                         <td>{{ donation.created_at.strftime('%Y-%m-%d') }}</td>
-                        <td>{{ donation.status }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_donation', id=donation.id) }}">Edit</a>
+                        <td><span class="badge status {{ donation.status }}">{{ donation.status }}</span></td>
+                        <td class="d-flex gap-2">
+                            <a href="{{ url_for('edit_donation', id=donation.id) }}" class="btn btn-secondary">Edit</a>
                             <a href="{{ url_for('delete_donation', id=donation.id) }}" 
+                               class="btn btn-danger"
                                onclick="return confirm('Are you sure?')">Delete</a>
                         </td>
                     </tr>

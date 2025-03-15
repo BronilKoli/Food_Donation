@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Request Details{% endblock %}
+
+{% block content %}
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
+        <h2>Request Details</h2>
+        {% if current_user.role == 'organization' %}
+            <a href="{{ url_for('my_requests') }}" class="btn btn-secondary">Back to My Requests</a>
+        {% elif current_user.role == 'donor' %}
+            <a href="{{ url_for('manage_donations') }}" class="btn btn-secondary">Back to My Donations</a>
+        {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        {% endif %}
+    </div>
+
+    <div class="request-detail-card">
+        <div class="request-header">
+            <h3>{{ request.donation.food_name }}</h3>
+            <span class="badge status {{ request.status }}">{{ request.status }}</span>
+        </div>
+        
+        <div class="request-info">
+            <div class="info-section">
+                <h4>Donation Information</h4>
+                <p><strong>Food Item:</strong> {{ request.donation.food_name }}</p>
+                <p><strong>Quantity:</strong> {{ request.donation.quantity }} {{ request.donation.unit }}</p>
+                <p><strong>Category:</strong> {{ request.donation.category }}</p>
+                {% if request.donation.expiry_date %}
+                <p><strong>Expires:</strong> {{ request.donation.expiry_date.strftime('%Y-%m-%d') }}</p>
+                {% endif %}
+                <p><strong>Donor:</strong> {{ request.donation.donor.name }}</p>
+            </div>
+            
+            <div class="info-section">
+                <h4>Request Information</h4>
+                <p><strong>Requested By:</strong> {{ request.requester.name }}</p>
+                <p><strong>Request Date:</strong> {{ request.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p><strong>Status:</strong> {{ request.status }}</p>
+                {% if request.volunteer %}
+                <p><strong>Assigned Volunteer:</strong> {{ request.volunteer.user.name }}</p>
+                {% endif %}
+            </div>
+            
+            {% if request.status == 'approved' or request.status == 'completed' %}
+            <div class="info-section">
+                <h4>Delivery Information</h4>
+                {% if request.pickup_time %}
+                <p><strong>Pickup Time:</strong> {{ request.pickup_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% endif %}
+                <p><strong>Delivery Status:</strong> 
+                    <span class="badge status {{ request.delivery_status or 'pending' }}">
+                        {{ request.delivery_status or 'Pending' }}
+                    </span>
+                </p>
+                {% if request.delivery_notes %}
+                <p><strong>Delivery Notes:</strong> {{ request.delivery_notes }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="request-actions">
+            {% if current_user.role == 'donor' and request.donation.user_id == current_user.id and request.status == 'pending' %}
+                <a href="{{ url_for('update_request', request_id=request.id, status='approved') }}" class="btn btn-success">Approve</a>
+                <a href="{{ url_for('update_request', request_id=request.id, status='denied') }}" class="btn btn-danger">Deny</a>
+            {% endif %}
+            
+            {% if current_user.role == 'donor' and request.donation.user_id == current_user.id and request.status == 'approved' %}
+                <a href="{{ url_for('update_request', request_id=request.id, status='completed') }}" class="btn btn-primary">Mark as Collected</a>
+            {% endif %}
+            
+            {% if current_user.role == 'organization' and request.requester_id == current_user.id and request.status == 'pending' %}
+                <a href="{{ url_for('browse_donations') }}" class="btn btn-secondary">Browse More Donations</a>
+            {% endif %}
+            
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('update_request', request_id=request.id, status='approved') }}" class="btn btn-success">Approve</a>
+                <a href="{{ url_for('update_request', request_id=request.id, status='denied') }}" class="btn btn-danger">Deny</a>
+                {% if request.status == 'approved' %}
+                    <a href="{{ url_for('update_request', request_id=request.id, status='completed') }}" class="btn btn-primary">Mark as Collected</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .request-detail-card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .request-header {
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--bg-secondary);
+    }
+    
+    .request-info {
+        padding: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .info-section {
+        padding: 1rem;
+        background-color: var(--bg-tertiary);
+        border-radius: var(--border-radius);
+    }
+    
+    .info-section h4 {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+    
+    .request-actions {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 1rem;
+    }
+</style>
+{% endblock %}

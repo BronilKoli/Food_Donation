@@ -3,17 +3,19 @@
 {% block title %}Volunteer Management{% endblock %}
 
 {% block content %}
-<div class="volunteer-management">
-    <h2>Volunteer Management</h2>
+<div class="container dashboard">
+    <div class="dashboard-header mb-3">
+        <h2>Volunteer Management</h2>
+    </div>
 
-    <div class="volunteer-actions">
-        <button class="btn-primary" onclick="addVolunteer()">Add Volunteer</button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-primary" onclick="addVolunteer()">Add Volunteer</button>
         <div class="search-box">
-            <input type="text" placeholder="Search volunteers..." id="volunteer-search">
+            <input type="text" placeholder="Search volunteers..." id="volunteer-search" class="form-control">
         </div>
     </div>
 
-    <div class="volunteers-list">
+    <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -29,13 +31,13 @@
                 <tr>
                     <td>{{ volunteer.name }}</td>
                     <td>{{ volunteer.contact }}</td>
-                    <td>{{ volunteer.status }}</td>
+                    <td><span class="badge status {{ volunteer.status }}">{{ volunteer.status }}</span></td>
                     <td>{{ volunteer.tasks_completed }}</td>
-                    <td>
-                        <button onclick="assignTask('{{ volunteer.id }}')" class="btn-secondary">
+                    <td class="d-flex gap-2">
+                        <button onclick="assignTask('{{ volunteer.id }}')" class="btn btn-secondary">
                             Assign Task
                         </button>
-                        <button onclick="viewHistory('{{ volunteer.id }}')" class="btn-info">
+                        <button onclick="viewHistory('{{ volunteer.id }}')" class="btn btn-info">
                             View History
                         </button>
                     </td>

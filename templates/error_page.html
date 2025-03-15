@@ -3,14 +3,16 @@
 {% block title %}Error - {{ error.code }}{% endblock %}
 
 {% block content %}
-<div class="error-container">
-    <div class="error-content">
-        <h1>{{ error.code }}</h1>
-        <h2>{{ error.message }}</h2>
-        <p>{{ error.description }}</p>
-        <div class="error-actions">
-            <a href="{{ url_for('index') }}" class="btn-primary">Go Home</a>
-            <button onclick="window.history.back()" class="btn-secondary">Go Back</button>
+<div class="container">
+    <div class="error-container mt-3">
+        <div class="error-content">
+            <h1>{{ error.code }}</h1>
+            <h2>{{ error.message }}</h2>
+            <p>{{ error.description }}</p>
+            <div class="error-actions d-flex gap-2 mt-3">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Go Home</a>
+                <button onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
+            </div>
         </div>
     </div>
 </div>
